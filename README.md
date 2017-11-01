@@ -18,7 +18,7 @@ Three main issues presented themselves to us.
     Memorize Intermediate Results is one better than that (in speed, compared to the slow solution).
     This stores in array to reuse values.
     
-3.  Ring increase around houses
+3.  Ring-increase around houses
 
     This is concerned with how to value adding a meter to around the house and the space you will lose on the corners.
     Comparison between the benefit of losing a quarter of the loss on the corners with the gains you would get from
