@@ -54,7 +54,7 @@ class HouseType:
         self.y         = self.site[1]
         self.area      = self.x * self.y
         self.landValue = self.value / self.area
-        self.ringValue = self.ringInc * self.value
+        self.ringValue = round(self.ringInc * self.value)
 
         # do not calculate rings if the basering is incorrect
         if self.baseRing - 1 < 0:
@@ -87,7 +87,7 @@ class HouseType:
             r.value = 0
             if ringWidth != self.baseRing:
                 r.value = self.ringValue
-            r.landValue = r.value / r.area
+            r.landValue = round(r.value / r.area, 1)
 
             # increase the cummilative values, and add the current values to r
             cumArea += r.area
@@ -96,7 +96,7 @@ class HouseType:
             cumValue += r.value
             r.cumValue = cumValue
 
-            cumLandValue = cumArea / cumValue
+            cumLandValue = round(cumValue / cumArea)
             r.cumLandValue = cumLandValue
 
             # add Ring object r to list ring
@@ -105,10 +105,10 @@ class HouseType:
     def printRingInfo(self):
         print()
         print(self.name)
-        printstr = "| ring: {:2}   x: {:2}   y: {:3}   area: {:3}   landValue: {:5} |"
+        printstr = "| ring: {:2}   x: {:2}   y: {:3}   area: {:5}  landValue: {:5}  cumArea: {:6}  cumValue: {:7}   cumLandValue: {:5} |"
         print((len(printstr) - 4) * "-")
         for r in self.ring:
-            print(printstr.format(r.ring, r.x, r.y, round(r.area), round(r.landValue, 1) ))
+            print(printstr.format(r.ring, r.x, r.y, r.area, r.landValue, r.cumArea, r.cumValue, r.cumLandValue ))
         print((len(printstr) - 4) * "-")
 
 
