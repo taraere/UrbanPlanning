@@ -31,7 +31,7 @@ def main():
 
     # example moveto
     someCoord = (23, 10)
-    someHouse.moveto()
+    someHouse.moveto(someCoord)
     print(someHouse.coord)
 
     # example move
