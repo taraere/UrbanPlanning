@@ -50,9 +50,9 @@ class HouseType:
         self.ringInc   = aRingIncrement
 
         # calculated values
-        self.x         = self.site[0]
-        self.y         = self.site[1]
-        self.area      = self.x * self.y
+        self.width     = self.site[0]
+        self.height    = self.site[1]
+        self.area      = self.width * self.height
         self.landValue = self.value / self.area
         self.ringValue = round(self.ringInc * self.value)
 
@@ -71,6 +71,7 @@ class HouseType:
         self.ring = list()
 
         # fill ring list with Ring objects
+        # TODO rewrite so that ringwidth and ring.width is less confusing
         for ringWidth in range(self.baseRing, MaxRingIt):
 
             # turn r into Ring object
@@ -79,8 +80,8 @@ class HouseType:
             # calc land value in € / m2, and calc other attributes
             r.width = ringWidth
             r.ring = ringWidth                  # synoniem
-            r.x = ringWidth * 2 + self.x
-            r.y = ringWidth * 2 + self.y
+            r.x = ringWidth * 2 + self.width
+            r.y = ringWidth * 2 + self.width
             r.area = r.x * r.y - cumArea
 
             # the first ring is part of the house, so it yields no value
@@ -121,29 +122,66 @@ class House:
     def __init__(self, aType, aCoord, ExtraRings):
         self.type = aType
         self.origin = aCoord
-        self.rings = ExtraRings
+        self.additionalRings = ExtraRings
         self.update()
 
     def update(self):
+        # calculate additional geometric information, based on init's current value
+            # EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5.
+        self.ring = self.type.ring[self.additionalRings]
+
+
+        # house geometry rep. boundary
+        self.boundary = Rectangle(self.origin, self.type.width, self.type.height)
+
+        # house ring rep. boundary
+        vector = (-1 * self.ring.ring, -1 * self.ring.ring)
+        ringOrigin = moveCoord(self.origin, ())
+
+        self.ringboundary =  Rectangle(self.origin, self.ring.x, self.ring.y)
+
+        # make some synonimes for lazy use
         self.coord = self.origin
+
+
+
         # TODO ADD CORRECT RING COORDINATES AND MORE HOUSE GEOMETRY INFO
 
-        # calculate additional geometric information, based on
-
     def move(self, vector):
-        # example vector = (6, -1)
-        self.origin = tuple(map(sum, zip(self.origin, vector)))
 
-        # change other values with this change
+        # add vector and origin coordinate, and update other values accordingly
+        self.origin = moveCoord(self.origin, vector)
         self.update()
 
     def moveTo(self, newCoord):
-        self.origin = newCoord
 
-        # change other values with this change
+        # replace origin coordinate, and update other values accordingly
+        self.origin = newCoord
         self.update()
 
 
+"""
+square class
+"""
+class Rectangle:
+
+    def __init__(self, OriginCoord, width, height):
+
+        self.x1 = OriginCoord[0]
+        self.y1 = OriginCoord[1]
+        self.coord1 = (self.x1, self.y1)
+        self.x2 = self.x1 + width
+        self.y2 = self.y1 + height
+        self.coord2 = (self.x2, self.y2)
+        self.area = width * height
+
+    def printAll(self):
+        print(self)
+        print("Rectangle.coord1: {} \n"
+              "Rectangle.coord2: {}".format(
+               self.coord1,
+               self.coord2)
+             )
 
 
 
@@ -165,3 +203,6 @@ def initHouseTypes(IterationMax=20):
                 RING_INCREMENT[i], maximumRingIterations)
         )
     return houseTypeList
+
+def moveCoord(coordinate, vector)
+    return tuple(map(sum, zip(coordinate, vector)))
