@@ -28,16 +28,18 @@ SITE           = [(8, 8),    (10, 7.5),  (11, 10.5  )]
 BASE_RING      = [2,         3,          6,          ]
 RING_INCREMENT = [0.03,      0.04,       0.06        ]
 
-# additional calculation constances
-MAX_RING = 20
-
+# additional calculation values
 
 ################################################################################
 
 # house class
-class House:
 
-    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement):
+"""
+Housetype Class generator
+"""
+class HouseType:
+
+    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt):
 
         # base values
         self.name      = aName
@@ -69,7 +71,7 @@ class House:
         self.ring = list()
 
         # fill ring list with Ring objects
-        for ringWidth in range(self.baseRing, MAX_RING):
+        for ringWidth in range(self.baseRing, MaxRingIt):
 
             # turn r into Ring object
             r = Ring()
@@ -100,54 +102,28 @@ class House:
             # add Ring object r to list ring
             self.ring.append(r)
 
-
-"""
-instantiate all house objects
-"""
-def initHouseTypes():
-
-    # make a list of House objects
-    houseList = list()
-    for i,s in enumerate(NAME):
-        houseList.append(House(NAME[i], FREQUENCY[i], VALUE[i], SITE[i], BASE_RING[i], RING_INCREMENT[i]))
-    return houseList
-
-
-
-
-
-
-
-"""
-main
-"""
-def main():
-    ht = initHouseTypes()
-
-
-    # what i want to make:
-    Temp
-
-
-
-
-
-    #test
-    #print(h)
-    for house in h:
+    def printRingInfo(self):
         print()
-        print(house.name)
+        print(self.name)
         printstr = "| ring: {:2}   x: {:2}   y: {:3}   area: {:3}   landValue: {:5} |"
         print((len(printstr) - 4) * "-")
-        for r in house.ring:
+        for r in self.ring:
             print(printstr.format(r.ring, r.x, r.y, round(r.area), round(r.landValue, 1) ))
         print((len(printstr) - 4) * "-")
 
 
-if __name__ == "__main__":
-    main()
+"""
+instantiate all house objects
+"""
+def initHouseTypes(IterationMax=20):
+    # determines how many rings will be added and calculated
+    maximumRingIterations = IterationMax
 
-
-# questions about the case:
-# can we turn bungalows & maisons ?
-# can we
+    # make a list of House objects
+    houseTypeList = list()
+    for i,s in enumerate(NAME):
+        houseTypeList.append(
+            HouseType(NAME[i], FREQUENCY[i], VALUE[i], SITE[i], BASE_RING[i],
+                RING_INCREMENT[i], maximumRingIterations)
+        )
+    return houseTypeList

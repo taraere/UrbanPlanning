@@ -12,23 +12,21 @@ NOTE    this thing is an example of how to use helpers
 
 from helpers import *
 
+
+
 def main():
-    ht = initHouseTypes()
+    ht = initHouseTypes(20)
 
-    # what i want to make:
-    #
+    # TEST print ring values
+    for houseType in ht:
+        houseType.printRingInfo()
 
-    #test
-    #print(h)
-    for house in ht:
-        print()
-        print(house.name)
-        printstr = "| ring: {:2}   x: {:2}   y: {:3}   area: {:3}   landValue: {:5} |"
-        print((len(printstr) - 4) * "-")
-        for r in house.ring:
-            print(printstr.format(r.ring, r.x, r.y, round(r.area), round(r.landValue, 1) ))
-        print((len(printstr) - 4) * "-")
 
+    # # what i want to make:
+    #                       houseType, houselocation, number of extra rings
+    # houseInstance = House(ht[1], (50,50), 3)
+    # print(houseInstance.type.name)
+    # >>> "Bungalow"
 
 if __name__ == "__main__":
     main()
