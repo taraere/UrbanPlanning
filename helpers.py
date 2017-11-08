@@ -9,7 +9,10 @@ NOTE    the minimum distance to another home is represented by the name "ring",
         as its boundary representations look like square rings.
 """
 #import numpy as np
-
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle as create_rectangle
+import numpy as np
 
 # constances general
 AREA = (160, 180)
@@ -21,25 +24,24 @@ MAX_BODIES       = 4            # maximum number of bodies
 MAX_RATIO        = 4            # l/b < x AND  b/l < x
 
 # house constances
-NAME           = ["Family",  "Bungalow", "Mansion"   ]
-FREQUENCY      = [60,        25,         15          ]
-VALUE          = [285000,    399000,     610000      ]
-SITE           = [(8, 8),    (10, 7.5),  (11, 10.5  )]
-BASE_RING      = [2,         3,          6,          ]
-RING_INCREMENT = [0.03,      0.04,       0.06        ]
+NAME           = ["Family",  "Bungalow", "Mansion"  ]
+FREQUENCY      = [60,        25,         15         ]
+VALUE          = [285000,    399000,     610000     ]
+SITE           = [(8, 8),    (10, 7.5),  (11, 10.5 )]
+BASE_RING      = [2,         3,          6,         ]
+RING_INCREMENT = [0.03,      0.04,       0.06       ]
+COLOUR         = ["r",       'g',        'y'        ]
 
-# additional calculation values
 
 ################################################################################
 
-# house class
 
 """
 Housetype Class
 """
 class HouseType:
 
-    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt):
+    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt, aColour):
 
         # base values
         self.name      = aName
@@ -48,7 +50,7 @@ class HouseType:
         self.site      = aSite
         self.baseRing  = aBaseRing
         self.ringInc   = aRingIncrement
-
+        self.colour    = aColour
         # calculated values
         self.width     = self.site[0]
         self.height    = self.site[1]
@@ -81,7 +83,7 @@ class HouseType:
             r.width = ringWidth
             r.ring = ringWidth                  # synoniem
             r.x = ringWidth * 2 + self.width
-            r.y = ringWidth * 2 + self.width
+            r.y = ringWidth * 2 + self.height
             r.area = r.x * r.y - cumArea
 
             # the first ring is part of the house, so it yields no value
@@ -130,20 +132,18 @@ class House:
             # EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5.
         self.ring = self.type.ring[self.additionalRings]
 
-
         # house geometry rep. boundary
-        self.boundary = Rectangle(self.origin, self.type.width, self.type.height)
+        self.boundary = Rectangle(self.origin, self.type.width, self.type.height, fc=self.type.colour)
+
+        # move houseOrigin diagonal to create ringOrigin
+        vector = (-1 * self.ring.ring, -1 * self.ring.ring)
+        ringOrigin = moveCoord(self.origin, vector)
 
         # house ring rep. boundary
-        vector = (-1 * self.ring.ring, -1 * self.ring.ring)
-        ringOrigin = moveCoord(self.origin, ())
-
-        self.ringboundary =  Rectangle(self.origin, self.ring.x, self.ring.y)
+        self.ringboundary =  Rectangle(ringOrigin, self.ring.x, self.ring.y, fc=self.type.colour, alpha=0.2)
 
         # make some synonimes for lazy use
         self.coord = self.origin
-
-
 
         # TODO ADD CORRECT RING COORDINATES AND MORE HOUSE GEOMETRY INFO
 
@@ -160,30 +160,33 @@ class House:
         self.update()
 
 
+
 """
 square class
 """
 class Rectangle:
 
-    def __init__(self, OriginCoord, width, height):
+    def __init__(self, OriginCoord, width, height, **kwargs):
 
         self.x1 = OriginCoord[0]
         self.y1 = OriginCoord[1]
         self.coord1 = (self.x1, self.y1)
+
         self.x2 = self.x1 + width
         self.y2 = self.y1 + height
         self.coord2 = (self.x2, self.y2)
-        self.area = width * height
+
+        # self.printAll()
+
+        # embed mathplot object in this object
+        self.mathplot = create_rectangle(self.coord1, width, height, 0, **kwargs)
 
     def printAll(self):
-        print(self)
         print("Rectangle.coord1: {} \n"
-              "Rectangle.coord2: {}".format(
+              "Rectangle.coord2: {} \n".format(
                self.coord1,
                self.coord2)
              )
-
-
 
 ###############################################################################
 
@@ -200,9 +203,53 @@ def initHouseTypes(IterationMax=20):
     for i,s in enumerate(NAME):
         houseTypeList.append(
             HouseType(NAME[i], FREQUENCY[i], VALUE[i], SITE[i], BASE_RING[i],
-                RING_INCREMENT[i], maximumRingIterations)
+                RING_INCREMENT[i], maximumRingIterations, COLOUR[i])
         )
     return houseTypeList
 
-def moveCoord(coordinate, vector)
+"""
+add a coordinate and a vector (movement representative) together
+"""
+def moveCoord(coordinate, vector):
     return tuple(map(sum, zip(coordinate, vector)))
+
+
+"""
+Dunno what to do with this part yet, but we ll figure it out
+"""
+def drawAll(houses):
+
+    # init figure and axes
+    fig = plt.figure()
+    ax = fig.add_subplot(111, aspect='equal')
+
+    # get rectangle information out of houses
+    houseBound_list = []
+    ringBound_list  = []
+    for house in houses:
+        ax.add_patch(house.boundary.mathplot)
+        ax.add_patch(house.ringboundary.mathplot)
+
+    # Create a Rectangle patch
+
+    # rect = patches.Rectangle((50,100),40,30,linewidth=1,edgecolor='r',facecolor='none')
+
+    # Add the patch to the Axes
+    # ax.add_patch(rect)
+
+    # place example rectangle
+    # rect = create_rectangle((80,80), 10, 10, fc='r')
+    # ax = fig.add_subplot(111, aspect='equal')
+
+    # determine how axis are drawn
+    # plt.axis('equal')
+    # plt.xlim([0,])
+    # plt.ylim([0, AREA[1]])
+    ax.set_xticks(np.arange(0, AREA[0], 10))
+    ax.set_yticks(np.arange(0, AREA[1], 10))
+
+    ax.set_xlim([0, AREA[0]])
+    ax.set_ylim([0, AREA[1]])
+
+    # draw the board
+    plt.show()

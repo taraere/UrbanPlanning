@@ -20,24 +20,21 @@ def main():
         #houseType.printRingInfo()
 
     # example house object
-    hType = ht[1]
-    coordinate = (50, 50)
-    ringsToAdd = 3
-    someHouse = House(hType, coordinate, ringsToAdd)
+    hType = [ht[0], ht[2], ht[0], ht[1], ht[2], ht[0], ht[2], ht[0], ht[1], ht[2]]
+    coordinate = [(50, 50), (64, 21), (54, 50), (84, 97), (12, 23), (45, 56), (100, 100), (30, 30), (200, 54)]
+    ringsToAdd = [3, 3, 6, 4, 7, 8, 9, 3, 0, 0]
 
-    # test
-    print(someHouse.type.name)
-    print(someHouse.coord)
+    # # example move
+    # someVector = (100, 100)
+    # someHouse.move(someVector)
+    # print(someHouse.coord)
 
-    # example moveto
-    someCoord = (23, 10)
-    someHouse.moveTo(someCoord)
-    print(someHouse.coord)
+    houses = []
+    for i in range(len(coordinate)):
+        houses.append(House(hType[i], coordinate[i], ringsToAdd[i]))
 
-    # example move
-    someVector = (-100, -100)
-    someHouse.move(someVector)
-    print(someHouse.coord)
+    # draw the board
+    drawAll(houses)
 
 if __name__ == "__main__":
     main()
