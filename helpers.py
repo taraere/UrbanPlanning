@@ -145,8 +145,6 @@ class House:
         # make some synonimes for lazy use
         self.coord = self.origin
 
-        # TODO ADD CORRECT RING COORDINATES AND MORE HOUSE GEOMETRY INFO
-
     def move(self, vector):
 
         # add vector and origin coordinate, and update other values accordingly
