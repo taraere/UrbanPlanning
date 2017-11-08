@@ -35,7 +35,7 @@ RING_INCREMENT = [0.03,      0.04,       0.06        ]
 # house class
 
 """
-Housetype Class generator
+Housetype Class
 """
 class HouseType:
 
@@ -110,6 +110,44 @@ class HouseType:
         for r in self.ring:
             print(printstr.format(r.ring, r.x, r.y, r.area, r.landValue, r.cumArea, r.cumValue, r.cumLandValue ))
         print((len(printstr) - 4) * "-")
+
+
+
+"""
+House Class
+"""
+class House:
+
+    def __init__(self, aType, aCoord, ExtraRings):
+        self.type = aType
+        self.origin = aCoord
+        self.rings = ExtraRings
+        self.update()
+
+    def update(self):
+        self.coord = self.origin
+        # TODO ADD CORRECT RING COORDINATES AND MORE HOUSE GEOMETRY INFO
+
+        # calculate additional geometric information, based on
+
+    def move(self, vector):
+        # example vector = (6, -1)
+        self.origin = tuple(map(sum, zip(self.origin, vector))
+
+        # change other values with this change
+        self.update()
+
+    def moveTo(self, newCoord):
+        self.origin = newCoord
+
+        # change other values with this change
+        self.update()
+
+
+
+
+
+###############################################################################
 
 
 """

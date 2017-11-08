@@ -12,33 +12,6 @@ NOTE    this thing is an example of how to use helpers
 
 from helpers import *
 
-class House:
-
-
-    def __init__(self, aType, aCoord, ExtraRings):
-        self.type = aType
-        self.origin = aCoord
-        self.rings = ExtraRings
-        self.update()
-
-    def update(self):
-        self.coord = self.origin
-
-        # calculate additional geometric information, based on
-
-    def move(self, vector):
-        # example vector = (6, -1)
-        self.origin = tuple(map(sum, zip(self.origin, vector))
-
-        # change other values with this change
-        self.update()
-
-    def moveTo(self, newCoord):
-        self.origin = newCoord
-
-        # change other values with this change
-        self.update()
-
 def main():
     ht = initHouseTypes(20)
 
