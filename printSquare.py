@@ -26,17 +26,17 @@ def main():
     someHouse = House(hType, coordinate, ringsToAdd)
 
     # test
-    print(someHouseInstance.type.name)
-    print(someHouseInstance.coord)
+    print(someHouse.type.name)
+    print(someHouse.coord)
 
     # example moveto
     someCoord = (23, 10)
-    someHouse.moveto(someCoord)
+    someHouse.moveTo(someCoord)
     print(someHouse.coord)
 
     # example move
-    somevector = (-100, -100)
-    somehouse.move(someVector)
+    someVector = (-100, -100)
+    someHouse.move(someVector)
     print(someHouse.coord)
 
 if __name__ == "__main__":
