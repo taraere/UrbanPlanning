@@ -186,6 +186,47 @@ class Rectangle:
                self.coord2)
              )
 
+
+# TODO make a map class
+# WIP
+
+class map:
+    pass
+    # def __init__()
+
+"""
+- TODO this function should become a method of the house class when it is ready
+    - Then 'houses' should be replaced with 'self.houses', as a class can remember
+      all the houses on it.
+    -
+
+"""
+def drawAll(houses):
+
+    # init figure and axes
+    fig = plt.figure()
+    ax = fig.add_subplot(111, aspect='equal')
+
+    # get rectangle information out of houses
+    houseBound_list = []
+    ringBound_list  = []
+    for house in houses:
+        ax.add_patch(house.boundary.mathplot)
+        ax.add_patch(house.ringboundary.mathplot)
+
+    # EXAMPLE FOR PROPERTIES
+    # rect = patches.Rectangle((50,100),40,30,linewidth=1,edgecolor='r',facecolor='none')
+
+    # determines how axis are drawn
+    ax.set_xticks(np.arange(0, AREA[0], 10))
+    ax.set_yticks(np.arange(0, AREA[1], 10))
+    ax.set_xlim([0, AREA[0]])
+    ax.set_ylim([0, AREA[1]])
+
+    # draw the board
+    plt.show()
+
+
 ###############################################################################
 
 
@@ -207,47 +248,47 @@ def initHouseTypes(IterationMax=20):
 
 """
 add a coordinate and a vector (movement representative) together
+- make a coordinate class/?????
 """
 def moveCoord(coordinate, vector):
-    return tuple(map(sum, zip(coordinate, vector)))
+    return tuple(sum(x) for x in zip(coordinate, vector))
 
+
+
+
+
+# FOUND ON THE INTERNETZZ
+"""
+class Coord(tuple):
+
+    def __new__(cls, width, height):
+        return tuple.__new__(cls, (width, height)) # create tuple with 2 items
+
+    def __init__(self, x, y):
+        self.x = y # width is the first argument passed
+        self.y = y # height is the next
+
+
+
+# or WAAAAYYY easier
+
+from collections import namedtuple
+
+Coord = namedtuple("Coord", ('x', 'y'))
+
+# does not allow additional stuff like
+coord1.move
+coord1.moveto
+coord1.plot
+
+
+# example
+coord1 = Coord(20, 40)
+print(coord1)
+>>> (20, 40)
+print(coord1.x)
+>>> 20
+print(coord1.y)
+>>> 40
 
 """
-Dunno what to do with this part yet, but we ll figure it out
-"""
-def drawAll(houses):
-
-    # init figure and axes
-    fig = plt.figure()
-    ax = fig.add_subplot(111, aspect='equal')
-
-    # get rectangle information out of houses
-    houseBound_list = []
-    ringBound_list  = []
-    for house in houses:
-        ax.add_patch(house.boundary.mathplot)
-        ax.add_patch(house.ringboundary.mathplot)
-
-    # Create a Rectangle patch
-
-    # rect = patches.Rectangle((50,100),40,30,linewidth=1,edgecolor='r',facecolor='none')
-
-    # Add the patch to the Axes
-    # ax.add_patch(rect)
-
-    # place example rectangle
-    # rect = create_rectangle((80,80), 10, 10, fc='r')
-    # ax = fig.add_subplot(111, aspect='equal')
-
-    # determine how axis are drawn
-    # plt.axis('equal')
-    # plt.xlim([0,])
-    # plt.ylim([0, AREA[1]])
-    ax.set_xticks(np.arange(0, AREA[0], 10))
-    ax.set_yticks(np.arange(0, AREA[1], 10))
-
-    ax.set_xlim([0, AREA[0]])
-    ax.set_ylim([0, AREA[1]])
-
-    # draw the board
-    plt.show()
