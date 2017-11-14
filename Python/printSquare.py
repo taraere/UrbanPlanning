@@ -10,10 +10,10 @@ DESC    STATE SPACE estimation calculation
 NOTE    this thing is an example of how to use helpers
 """
 
-from helpers import *
+from Python.helpers import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
-SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
+SELECTED_HOUSE_COUNT = HOUSE_COUNT[2]
 
 """
 build a hardcoded sollution
@@ -34,14 +34,8 @@ def main():
         map1.addHouse(hType[i], coordinate[i], ringsToAdd[i])
 
 
-    something = map1.house[1].boundary.height
-    print(something)
-
     # draw the map
     map1.plot()
-
-
-
 
 
 """
@@ -114,7 +108,7 @@ def main4():
 
 
 if __name__ == "__main__":
-    main()
+    main2()
 
 
 
