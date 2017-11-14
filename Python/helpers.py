@@ -11,8 +11,6 @@ NOTE    the minimum distance to another home is represented by the name "ring",
 NOTE    isTouching()
 
 """
-#import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle as mathplot_rectangle
 import numpy as np
@@ -35,7 +33,6 @@ SITE           = [(8, 8),    (10, 7.5),  (11, 10.5 )]
 BASE_RING      = [2,         3,          6,         ]
 RING_INCREMENT = [0.03,      0.04,       0.06       ]
 COLOUR         = ["r",       'g',        'y'        ]
-
 
 ################################################################################
 """
