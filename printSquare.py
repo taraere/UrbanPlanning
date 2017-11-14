@@ -15,10 +15,72 @@ from helpers import *
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
 SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
 
+
 """
-build a hardcoded sollution
+build a correct random map
 """
 def main():
+    housetypes = initHouseTypes(20)
+
+    # generate correct type parameters
+    housetypelist = []
+    for ht in housetypes:
+        n = round(ht.frequency * SELECTED_HOUSE_COUNT)
+        housetypelist += [ht] * n
+
+    houstypelist = shuffle(housetypelist)
+    print(housetypelist)
+
+    # make a map
+    map1 = Map()
+
+    # add a number of houses to map
+    for i in range(SELECTED_HOUSE_COUNT):
+
+        # get current housetype
+        ht = housetypelist[i]
+
+        # the add house function which i want
+        map1.addHouse(ht, (0,0), 0, "non_colliding", "random_positions")
+
+    # draw the map
+    map1.plot()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # # example move
+    # someVector = (100, 100)
+    # someHouse.move(someVector)
+    # print(someHouse.coord)
+
+
+# questions about the case:
+# can we turn bungalows & maisons ?
+# can we
+################################################################################
+"""
+legacy:
+"""
+"""
+build a hardcoded map
+"""
+def main_old1():
     ht = initHouseTypes(20)
 
     # example house object values
@@ -41,13 +103,10 @@ def main():
     map1.plot()
 
 
-
-
-
 """
-build a random sollution
+build a random map
 """
-def main2():
+def main_old2():
     housetypes = initHouseTypes(20)
 
     # generate hosue parameteres
@@ -75,64 +134,6 @@ def main2():
     map1.plot()
 
 
-"""
-build a correct random sollution
-"""
-def main3():
-    housetypes = initHouseTypes(20)
-
-    # generate hosue parameteres
-    housetypelist = []
-    for ht in housetypes:
-        n = round(ht.frequency * SELECTED_HOUSE_COUNT)
-        housetypelist += [ht] * n
-
-    houstypelist = shuffle(housetypelist)
-    print(housetypelist)
-
-    # make a map
-    map1 = Map()
-
-    # add houses to map
-    for i in range(SELECTED_HOUSE_COUNT):
-
-        # create other parameters
-        coordinate = (randint(0, AREA[0]-1), randint(0, AREA[1]-1))
-        ringsToAdd = randint(1, 12)
-
-        # add house
-        map1.addHouse(housetypelist[i], coordinate, ringsToAdd)
-
-    # draw the map
-    map1.plot()
-
-
-
-
-def main4():
-    housetypes = initHouseTypes(20)
-
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-    # # example move
-    # someVector = (100, 100)
-    # someHouse.move(someVector)
-    # print(someHouse.coord)
-
-
-# questions about the case:
-# can we turn bungalows & maisons ?
-# can we

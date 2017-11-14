@@ -16,7 +16,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle as mathplot_rectangle
 import numpy as np
-from random import randint, shuffle
+from random import randint, shuffle, random, randrange, choice, uniform
 
 # constances general
 AREA = (160, 180)
@@ -125,26 +125,47 @@ class House:
 
     def __init__(self, aType, aCoord, addRings):
         self.type = aType
-        self.origin = aCoord
         self.additionalRings = addRings
+
+        # select current ring
+        self.ring = self.type.ring[self.additionalRings]
+
+        # calc house's lower- and upperbounds of x and y coordinates
+        self.xLower = self.ring.ringWidth
+        print(self.xLower)
+        self.yLower = self.ring.ringWidth
+        print(self.yLower)
+        self.xUpper = AREA[0] - self.ring.ringWidth - self.type.width
+        print(self.xUpper)
+        self.yUpper = AREA[1] - self.ring.ringWidth - self.type.height
+        print(self.yUpper)
+
+        # assign either a random coordinate, or assign given coordinate
+        if aCoord == "random":
+            # randomize numbers, with 0.5 precision
+            random_x = round(uniform(self.xLower, self.xUpper) * 2) / 2
+            random_y = round(uniform(self.yLower, self.yUpper) * 2) / 2
+
+            self.origin = (random_x, random_y)
+        else:
+            self.origin = aCoord
+
+        # update geometic info
         self.update()
 
     def update(self):
         # calculate additional geometric information, based on init's current value
             # EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5.
 
-        # select current ring
-        self.ring = self.type.ring[self.additionalRings]
-
         # house geometry rep. boundary
-        self.boundary = Rectangle(self.origin, self.type.width, self.type.height, fc=self.type.colour)
+        self.boundary = Rectangle(self.origin, self.type.width, self.type.height)
 
         # move houseOrigin diagonal to create ringOrigin
         vector = (-1 * self.ring.ringWidth, -1 * self.ring.ringWidth)
         ringOrigin = moveCoord(self.origin, vector)
 
         # house ring rep. boundary
-        self.ringboundary =  Rectangle(ringOrigin, self.ring.x, self.ring.y, fc=self.type.colour, alpha=0.2)
+        self.ringboundary = Rectangle(ringOrigin, self.ring.x, self.ring.y)
 
         # make some synonimes for lazy use
         self.coord = self.origin
@@ -168,7 +189,7 @@ square class
 """
 class Rectangle:
 
-    def __init__(self, OriginCoord, width, height, **kwargs):
+    def __init__(self, OriginCoord, width, height):
 
         self.width = width
         self.height = height
@@ -181,15 +202,11 @@ class Rectangle:
         self.y2 = self.y1 + height
         self.coord2 = (self.x2, self.y2)
 
-        # embed mathplot object in this object
-        self.mathplot = mathplot_rectangle(self.coord1, width, height, 0, **kwargs)
-
-    def printAll(self):
-        print("Rectangle.coord1: {} \n"
-              "Rectangle.coord2: {} \n".format(
+    def toString(self):
+        return ("Rectangle.coord1: {} \n Rectangle.coord2: {} \n".format(
                self.coord1,
                self.coord2)
-             )
+               )
 
     # TODO make method of comparissons:
 
@@ -240,12 +257,67 @@ class Map:
     """
     add a [aType] house to the map at [aCoord], with [addrings] rings
     """
-    def addHouse(self, aType, aCoord, addRings):
-
+    def addHouseStupid(self, aType, aCoord, addRings):
+        # simple way of creating a house
         self.house.append(House(aType, aCoord, addRings))
 
-    def removeLastHouse(self):
-        self.house.pop()
+    """
+    add a [aType] house to the map at [aCoord], with [addrings] rings
+    the following options are usable:
+        ["non_colliding"]
+            pick random house locations until the position is valid.
+        ["random_positions"]
+            place house at a random location
+        ["Tactical_fit"]
+            TODO
+    """
+    def addHouse(self, aType, aCoord, addRings, *options):
+
+        # apply options
+        LoopUntilValid = False
+        if any(option == "non_colliding" for option in options):
+            print("make a house without colliding")
+            LoopUntilValid = True
+        if any(option == "random_positions" for option in options):
+            print("make house at a random location")
+            h = (House(aType, "random", addRings))
+        else:
+            print("make a house in ordinary fashion")
+            h = (House(aType, aCoord, addRings))
+
+
+        if not LoopUntilValid:
+            # directly append h if we dont need to check for valid position
+            self.house.append(h)
+        else:
+            # if we do need to check if placement is valid
+            while(True):
+
+                # get h's 4 boundary coordinates
+                bound_coords = [(x, y) for x in [h.boundary.x1, h.boundary.x2]
+                                       for y in [h.boundary.y1, h.boundary.y2]]
+
+                # # calculate per boundary coordinate
+                # for bound_coord in bound_coords:
+                #     # per house in embedded houses
+                #     for ring in self.house.ringboundary:
+                #         # clear names
+                #         x = bound_coord[0]
+                #         y = bound_coord[1]
+                #
+                #         if ring.x1 < x < ring.x2:
+                #             print("GOED")
+                #         if ring.y1 < y < ring.y2:
+                #             print("goed")
+                #
+                # # placement is incorrect, try again at different position
+                #
+                # h = (House(aType, "random", addRings)
+                # go into loop again
+                #
+                self.house.append(h)
+                break
+
 
     """
     plot the full map with all houses. This code is hard to understand
@@ -261,8 +333,10 @@ class Map:
         houseBound_list = []
         ringBound_list  = []
         for house in self.house:
-            ax.add_patch(house.boundary.mathplot)
-            ax.add_patch(house.ringboundary.mathplot)
+            rec1 = mathplot_rectangle(house.boundary.coord1, house.boundary.width, house.boundary.height, 0, fc=house.type.colour)
+            rec2 = mathplot_rectangle(house.ringboundary.coord1, house.ringboundary.width, house.ringboundary.height, 0, fc=house.type.colour, alpha=0.2)
+            ax.add_patch(rec1)
+            ax.add_patch(rec2)
 
         # EXAMPLE FOR PROPERTIES
         # rect = patches.Rectangle((50,100),40,30,linewidth=1,edgecolor='r',facecolor='none')
@@ -275,6 +349,8 @@ class Map:
 
         # draw the board
         plt.show()
+
+
 
 
 ###############################################################################
@@ -358,5 +434,21 @@ daarom eerst 1 groot apparaat maken, dan kleinere
 [9][3][2][1]
 [9][][][]
 
+
+
+
+        # make clearer var names
+        x = h.origin[0]
+        y = h.origin[1]
+
+        # push the house within bounds if the house is outside of bounds
+        if x <  h.xLower:
+            x = h.xLower
+        if y <  h.yLower:
+            y = h.yLower
+        if x >= h.xUppers:
+            x = h.xUpper
+        if y >= h.yUpper:
+            y = h.yUpper
 
 """
