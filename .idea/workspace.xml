@@ -2,14 +2,91 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75ea04b7-a856-43a5-bf01-2b8040ba6ecf" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/img/1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/img/3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/img/knip2.PNG" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/img/knip3.PNG" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/Gruntfile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/print/paper.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/print/pdf.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/reveal.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/reveal.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/beige.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/blood.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/default.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/moon.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/night.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/serif.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/simple.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/sky.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/solarized.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/beige.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/blood.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/default.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/moon.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/night.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/serif.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/simple.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/sky.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/source/solarized.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/template/mixins.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/template/settings.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/css/theme/template/theme.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/js/reveal.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/js/reveal.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/css/zenburn.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/font/league_gothic-webfont.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/font/league_gothic-webfont.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/font/league_gothic-webfont.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/font/league_gothic-webfont.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/font/league_gothic_license" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/js/classList.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/js/head.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/lib/js/html5shiv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/highlight/highlight.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/leap/leap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/markdown/example.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/markdown/example.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/markdown/markdown.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/markdown/marked.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/math/math.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/multiplex/client.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/multiplex/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/multiplex/master.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/notes-server/client.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/notes-server/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/notes-server/notes.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/notes/notes.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/notes/notes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/postmessage/example.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/postmessage/postmessage.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/print-pdf/print-pdf.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/remotes/remotes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/search/search.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/plugin/zoom-js/zoom.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/examples/assets/image1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/examples/assets/image2.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/examples/barebones.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/examples/embedded-media.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/examples/math.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/examples/slide-backgrounds.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/qunit-1.12.0.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/qunit-1.12.0.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test-markdown-attributes.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test-markdown-attributes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test-markdown-element-attributes.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test-markdown-element-attributes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test-markdown.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test-markdown.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Presentations/reveal.js/test/test.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Presentations/.ipynb_checkpoints/Beunhaaas-checkpoint.ipynb" afterPath="$PROJECT_DIR$/Presentations/.ipynb_checkpoints/Beunhaaas-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Presentations/Beunhaaas.ipynb" afterPath="$PROJECT_DIR$/Presentations/Beunhaaas.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Presentations/Beunhaaas.slides.html" afterPath="$PROJECT_DIR$/Presentations/Beunhaaas.slides.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Python/helpers.py" afterPath="$PROJECT_DIR$/Python/helpers.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,7 +112,7 @@
         <entry file="file://$PROJECT_DIR$/Python/helpers.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="250">
-              <caret line="310" column="26" lean-forward="true" selection-start-line="310" selection-start-column="26" selection-end-line="310" selection-end-column="26" />
+              <caret line="310" column="26" lean-forward="false" selection-start-line="310" selection-start-column="26" selection-end-line="310" selection-end-column="26" />
               <folding>
                 <element signature="e#265#296#0" expanded="true" />
               </folding>
@@ -333,7 +410,6 @@
   <component name="TodoView" selected-index="3" />
   <component name="ToolWindowManager">
     <frame x="-13" y="0" width="1157" height="795" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20358744" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32859176" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -456,7 +532,7 @@
     <entry file="file://$PROJECT_DIR$/Python/helpers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
-          <caret line="310" column="26" lean-forward="true" selection-start-line="310" selection-start-column="26" selection-end-line="310" selection-end-column="26" />
+          <caret line="310" column="26" lean-forward="false" selection-start-line="310" selection-start-column="26" selection-end-line="310" selection-end-column="26" />
           <folding>
             <element signature="e#265#296#0" expanded="true" />
           </folding>
