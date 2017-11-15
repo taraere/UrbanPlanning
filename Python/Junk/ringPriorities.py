@@ -112,29 +112,15 @@ def initHouseTypes():
         houseList.append(House(NAME[i], FREQUENCY[i], VALUE[i], SITE[i], BASE_RING[i], RING_INCREMENT[i]))
     return houseList
 
-
-
-
-
-
-
 """
 main
 """
 def main():
     ht = initHouseTypes()
 
-
-    # what i want to make:
-    Temp
-
-
-
-
-
     #test
     #print(h)
-    for house in h:
+    for house in ht:
         print()
         print(house.name)
         printstr = "| ring: {:2}   x: {:2}   y: {:3}   area: {:3}   landValue: {:5} |"
