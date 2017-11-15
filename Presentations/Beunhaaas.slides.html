@@ -36,7 +36,11 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 
 <!-- Loading the mathjax macro -->
 <!-- Load mathjax -->
+<<<<<<< HEAD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+=======
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+>>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -58,7 +62,11 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     <!-- End of mathjax configuration -->
 
 <!-- Get Font-awesome from cdn -->
+<<<<<<< HEAD
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+=======
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
+>>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac
 
 <style type="text/css">
     /*!
@@ -11854,6 +11862,7 @@ a.anchor-link {
 <div class="reveal">
 <div class="slides">
 <section><section>
+<<<<<<< HEAD
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12040,12 +12049,93 @@ $$160 \times 180 \times 80 \times 3 \approx 7 \times 10^6$$<ul>
 
 <span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
+=======
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">notebook.services.config</span> <span class="k">import</span> <span class="n">ConfigManager</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">()</span>
+
+<span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;livereveal&#39;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+              <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+              <span class="s1">&#39;scroll&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">})</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt output_prompt">Out[45]:</div>
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;height&#39;: 600, &#39;scroll&#39;: True, &#39;width&#39;: 1000}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1> This is Beunhaas Architects </h1><ul>
+<li>take note:</li>
+<li>listen we're awesome</li>
+</ul><left><img src="https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fdelismusiccorner.nl%2F1354-large_default%2F123-beun-de-beunhaas.jpg&f=1"></left>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="My-slide-show!!-Mine!">My slide show!! Mine!<a class="anchor-link" href="#My-slide-show!!-Mine!">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Another-heading">Another heading<a class="anchor-link" href="#Another-heading">&#182;</a></h2><ul>
+<li>circles have stuff</li>
+<li>here's $\pi$</li>
+</ul>
+$$\pi = \frac{C}{D}$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">slides</span> <span class="n">beunhaaas</span><span class="o">.</span><span class="n">ipynb</span> 
+>>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<<<<<<< HEAD
 </div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12130,6 +12220,35 @@ $$160 \times 180 \times 80 \times 3 \approx 7 \times 10^6$$<ul>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Snake_icon.svg/830px-Snake_icon.svg.png"><img></li>
 </ul>
 
+=======
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-48-e4db58874071&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">1</span>
+<span class="ansi-red-fg">    jupyter nbconvert --to slides beunhaaas.ipynb</span>
+                    ^
+<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="In-Conclusion">In Conclusion<a class="anchor-link" href="#In-Conclusion">&#182;</a></h2><h3 id="we're-awesome">we're awesome<a class="anchor-link" href="#we're-awesome">&#182;</a></h3>
+>>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac
 </div>
 </div>
 </div>
@@ -12145,7 +12264,11 @@ $$160 \times 180 \times 80 \times 3 \approx 7 \times 10^6$$<ul>
 </div>
 </div>
 
+<<<<<<< HEAD
 </div></div></section></section>
+=======
+</div></section></section>
+>>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac
 </div>
 </div>
 

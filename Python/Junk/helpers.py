@@ -3,7 +3,7 @@ NAME    ringPriorities
 
 AUTHOR  jos feenstra
 
-DESC    Contains Class information which represents the datastructure.
+DESC    STATE SPACE estimation calculation
 
 NOTE    the minimum distance to another home is represented by the name "ring",
         as its boundary representations look like square rings.
@@ -11,11 +11,12 @@ NOTE    the minimum distance to another home is represented by the name "ring",
 NOTE    isTouching()
 
 """
+#import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle as mathplot_rectangle
 import numpy as np
 from random import randint, shuffle, random, randrange, choice, uniform
-from collections import Iterable
 
 # constances general
 AREA = (160, 180)
@@ -34,6 +35,7 @@ SITE           = [(8, 8),    (10, 7.5),  (11, 10.5 )]
 BASE_RING      = [2,         3,          6,         ]
 RING_INCREMENT = [0.03,      0.04,       0.06       ]
 COLOUR         = ["r",       'g',        'y'        ]
+
 
 ################################################################################
 """
@@ -123,16 +125,20 @@ class House:
 
     def __init__(self, aType, aCoord, addRings):
         self.type = aType
-        self.addRings = addRings
+        self.additionalRings = addRings
 
         # select current ring
-        self.ring = self.type.ring[self.addRings]
+        self.ring = self.type.ring[self.additionalRings]
 
         # calc house's lower- and upperbounds of x and y coordinates
         self.xLower = self.ring.ringWidth
+        print(self.xLower)
         self.yLower = self.ring.ringWidth
+        print(self.yLower)
         self.xUpper = AREA[0] - self.ring.ringWidth - self.type.width
+        print(self.xUpper)
         self.yUpper = AREA[1] - self.ring.ringWidth - self.type.height
+        print(self.yUpper)
 
         # assign either a random coordinate, or assign given coordinate
         if aCoord == "random":
@@ -179,7 +185,7 @@ class House:
 ###############################################################################
 
 """
-rectangle class
+square class
 """
 class Rectangle:
 
@@ -196,11 +202,6 @@ class Rectangle:
         self.y2 = self.y1 + height
         self.coord2 = (self.x2, self.y2)
 
-        # get self' 4 boundary coordinates
-        self.bound_coords = [(x, y) for x in [self.x1, self.x2]
-                                    for y in [self.y1, self.y2]]
-
-
     def toString(self):
         return ("Rectangle.coord1: {} \n Rectangle.coord2: {} \n".format(
                self.coord1,
@@ -209,65 +210,25 @@ class Rectangle:
 
     # TODO make method of comparissons:
 
-    # return true if self is touching any part of list of rectangles
-    def isTouching(self, listOfRectangles):
+    def isTouching(self, obj2):
 
-        # TODO make it so a single rectangle also works
-        if not isinstance(listOfRectangles, Iterable):
-            listOfRectangles = [listOfRectangles]
+        # find out if object is coordinate or square
+        checkCoords = []
+        if isinstance(obj2, Rectangle):
+            print("its an rectangle")
 
-        # calculate per boundary coordinate
-        for bound_coord in self.bound_coords:
-            # per rectangle in given list of rectangles
-            for rec in listOfRectangles:
+            [checkCoords.append((x, y)) for x in obj2.coord1 for y in obj2.coord2]
+            print(checkCoords)
 
-                # rename bound coord for the sake of clear names
-                x = bound_coord[0]
-                y = bound_coord[1]
-                # print(bound_coord)
-                # print(rec.x1, rec.x2, rec.y1, rec.y2)
-                # print(rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2)
-                # if self. boundary coord is inside of rec. boundaries
-                if rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2:
-                    return True
+        elif isinstance(obj2, tuple):
+            print("its an coord")
+            checkCoords.append(obj2)
+        else:
+            print("ERROR: secondObject is not of valid type")
 
-                # test the other way around
-                for rec_bound in rec.bound_coords:
-
-                    # if rec. boundary coord is within self. boundaries
-                    if self.x1 < rec_bound[0] < self.x2 and self.y1 < rec_bound[1] < self.y2:
-                        return True
-
-        # if code falls down till this part, none of the rectangles are touching self
-        return False
-
-    # return true if self is completely within list of rectangles
-    def isWithin(self, listOfRectangles):
-
-        # get self' 4 boundary coordinates
-        bound_coords = [(x, y) for x in [self.x1, self.x2]
-                               for y in [self.y1, self.y2]]
-
-        # TODO make it so a single rectangle also works
-        if not isinstance(listOfRectangles, Iterable):
-            listOfRectangles = [listOfRectangles]
-
-        # calculate per boundary coordinate
-        for bound_coord in bound_coords:
-            # per rectangle in given list of rectangles
-            for rec in listOfRectangles:
-
-                # rename bound coord for the sake of clear names
-                x = bound_coord[0]
-                y = bound_coord[1]
-
-                # test conditions
-                if not rec.x1 <= x < rec.x2 or not rec.y1 <= y < rec.y2:
-                    return False
-
-        # if code falls down till this part, position is correct
-        return True
-
+        for checkCoord in checkCoords:
+            print(checkCoord)
+        # return True / False
 
 ###############################################################################
 
@@ -315,7 +276,6 @@ class Map:
         # apply options
         LoopUntilValid = False
         if any(option == "non_colliding" for option in options):
-            print()
             print("make a house without colliding")
             LoopUntilValid = True
         if any(option == "random_positions" for option in options):
@@ -331,79 +291,33 @@ class Map:
             self.house.append(h)
         else:
             # if we do need to check if placement is valid
-            relocateCounter = 0
             while(True):
 
-                # list of squares to test with
-                allRings = [house.ringboundary for house in self.house]
+                # get h's 4 boundary coordinates
+                bound_coords = [(x, y) for x in [h.boundary.x1, h.boundary.x2]
+                                       for y in [h.boundary.y1, h.boundary.y2]]
 
-                # check if the h's house boundary is touching any existing ringboundary
-                if h.boundary.isTouching(allRings):
-                    # incorrect placement
-                    relocateCounter += 1
-                    h = (House(aType, "random", addRings))
-                else:
-                    # correct placement
-                    self.house.append(h)
-                    print("Times Relocated: ", relocateCounter)
-                    break
+                # # calculate per boundary coordinate
+                # for bound_coord in bound_coords:
+                #     # per house in embedded houses
+                #     for ring in self.house.ringboundary:
+                #         # clear names
+                #         x = bound_coord[0]
+                #         y = bound_coord[1]
+                #
+                #         if ring.x1 < x < ring.x2:
+                #             print("GOED")
+                #         if ring.y1 < y < ring.y2:
+                #             print("goed")
+                #
+                # # placement is incorrect, try again at different position
+                #
+                # h = (House(aType, "random", addRings)
+                # go into loop again
+                #
+                self.house.append(h)
+                break
 
-    """
-    expand all rings to their maxi
-    """
-    def expandRings(self):
-        # NOTE this code might also work with coordinate distances, distance to edge etc, and then floor() the minimal answer
-
-        print("\n Expanding rings...")
-
-        # make a new list of houses
-        newHouses = []
-
-        # per imbedded hosue
-        for house in self.house:
-            # TODO do while loop?????
-            houses = self.house
-
-            # count number of rings added
-            added_rings = []
-
-            # make new house with 1 more ring
-            hCurrent = house
-            hNew = (House(house.type, house.origin, house.addRings + 1))
-
-            # save boundaries of all embedded houses
-            allBoundaries = [testhouse.boundary for testhouse in self.house if testhouse.origin != house.origin]
-
-            # the new ring is valid when its completely within map boundaries,
-            # and not any house can be touching this new ringboundary
-            while(hNew.ringboundary.isWithin(self.boundary) and
-                not any([houseboundary.isTouching(hNew.ringboundary) for houseboundary in allBoundaries])
-                ):
-                # if new ring is possible, replace hCurrent with hNew, and repeat
-                added_rings.append(hNew.addRings)
-
-                hCurrent = hNew
-                hNew = (House(hCurrent.type, hCurrent.origin, hCurrent.addRings + 1))
-
-            # if it is not possible, quit loop
-            print("\n rings added: ", added_rings)
-            newHouses.append(hCurrent)
-
-        # after all loopnig:
-        self.house = newHouses
-
-
-    """
-    determine the value of the land
-    """
-    def calculateValue(self):
-        total = 0
-        # per house
-        for house in self.house:
-            # add house's cummilative value of the current ring
-            total += house.ring.cumValue
-
-        return total
 
     """
     plot the full map with all houses. This code is hard to understand
@@ -472,45 +386,13 @@ def moveCoord(coordinate, vector):
 
 
 
+# is coord within boundary?
+# is square within square?
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# FOUND ON THE INTERNETZZ
 """
-################################################################################
-All of this stuff is junk, but it might be useful to show previous versions of
-the code
-################################################################################
-:
-"
-
 class Coord(tuple):
 
     def __new__(cls, width, height):
@@ -568,94 +450,5 @@ daarom eerst 1 groot apparaat maken, dan kleinere
             x = h.xUpper
         if y >= h.yUpper:
             y = h.yUpper
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # # example move
-    # someVector = (100, 100)
-    # someHouse.move(someVector)
-    # print(someHouse.coord)
-
-
-# questions about the case:
-# can we turn bungalows & maisons ?
-# can we
-################################################################################
-
-"
-build a hardcoded map
-"
-def main_old1():
-    ht = initHouseTypes(20)
-
-    # example house object values
-    hType = [ht[0], ht[2], ht[0], ht[1], ht[2], ht[0], ht[2], ht[0], ht[1], ht[2]]
-    coordinate = [(50, 50), (64, 21), (54, 50), (84, 97), (12, 23), (45, 56), (100, 100), (30, 30), (200, 54)]
-    ringsToAdd = [3, 3, 6, 4, 7, 8, 9, 3, 0, 0]
-
-    # make a map
-    map1 = Map()
-
-    # fill the map
-    for i in range(9):
-        map1.addHouse(hType[i], coordinate[i], ringsToAdd[i])
-
-
-    something = map1.house[1].boundary.height
-    print(something)
-
-    # draw the map
-    map1.plot()
-
-
-
-build a random map
-
-def main_old2():
-    housetypes = initHouseTypes(20)
-
-    # generate hosue parameteres
-    housetypelist = []
-    for housetype in housetypes:
-        n = round(housetype.frequency * SELECTED_HOUSE_COUNT)
-        housetypelist += [housetype] * n
-
-    # houstypelist = shuffle(housetypelist)
-
-    # make a map
-    map1 = Map()
-
-    # add houses to map
-    for i in range(SELECTED_HOUSE_COUNT):
-
-        # create other parameters
-        coordinate = (randint(0, AREA[0]-1), randint(0, AREA[1]-1))
-        ringsToAdd = randint(1, 12)
-
-        # add house
-        map1.addHouse(housetypelist[i], coordinate, ringsToAdd)
-
-    # draw the map
-    map1.plot()
-
-
-
 
 """
