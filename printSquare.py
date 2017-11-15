@@ -26,7 +26,7 @@ SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
 build a correct random map
 """
 def main():
-    housetypes = initHouseTypes(20)
+    housetypes = initHouseTypes(50)
 
     # generate correct type parameters
     housetypelist = []
@@ -49,6 +49,7 @@ def main():
         # the add house function which i want
         map1.addHouse(ht, (0,0), 10, "non_colliding", "random_positions")
 
+    # draw first time
     map1.plot()
 
     # make change all rings to its largest possible iteration
@@ -58,7 +59,7 @@ def main():
     value = map1.calculateValue()
     print("Total map value:", value)
 
-    # draw the map
+    # draw the map a second time
     map1.plot()
 
 if __name__ == "__main__":
