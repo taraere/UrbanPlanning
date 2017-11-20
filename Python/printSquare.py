@@ -10,14 +10,14 @@ DESC    STATE SPACE estimation calculation
 NOTE    this thing is an example of how to use helpers
 """
 
-<<<<<<< HEAD:Python/printSquare.py
+# HEAD:Python/printSquare.py
 from Python.helpers import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
 SELECTED_HOUSE_COUNT = HOUSE_COUNT[2]
 
 """
-build a hardcoded sollution
+build a hardcoded solution
 """
 def main():
     ht = initHouseTypes(20)
@@ -40,12 +40,12 @@ def main():
 
 
 """
-build a random sollution
+build a random solution
 """
 def main2():
     housetypes = initHouseTypes(20)
 
-    # generate hosue parameteres
+    # generate house parameters
     housetypelist = []
     for housetype in housetypes:
         n = round(housetype.frequency * SELECTED_HOUSE_COUNT)
@@ -68,18 +68,16 @@ def main2():
 
     # draw the map
     map1.plot()
-=======
 
 # TODO turn main into hillclimber
 # TODO save all values generated in .txt file
-# TODO make an algoritm which determines which ring is the most valuable to add, with value in price / m2
+# TODO make an algorithm which determines which ring is the most valuable to add, with value in price / m2
 
 
-from helpers import *
-
+# from helpers import *
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
 SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
->>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac:printSquare.py
+# >>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac:printSquare.py
 
 
 """
@@ -103,7 +101,7 @@ def main():
     # add a number of houses to map
     for i in range(SELECTED_HOUSE_COUNT):
 
-        # get current housetype
+        # get current house-type
         ht = housetypelist[i]
 
         # the add house function which i want
@@ -122,19 +120,7 @@ def main():
     map1.plot()
 
 if __name__ == "__main__":
-<<<<<<< HEAD:Python/printSquare.py
     main2()
-
-
-
-
-
-
-
-
-
-
-
 
     # # example move
     # someVector = (100, 100)
@@ -145,6 +131,3 @@ if __name__ == "__main__":
 # questions about the case:
 # can we turn bungalows & maisons ?
 # can we
-=======
-    main()
->>>>>>> 1497b12e60cc4eb8241aa5f91612489838e80eac:printSquare.py
