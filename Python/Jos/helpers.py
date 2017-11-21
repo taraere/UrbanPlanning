@@ -12,12 +12,12 @@ NOTE    isTouching()
 
 """
 #import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle as mathplot_rectangle
 import numpy as np
 from random import randint, shuffle, random, randrange, choice, uniform
 from collections import Iterable
+import csv
 
 # constances general
 AREA = (160, 180)
@@ -336,7 +336,7 @@ class Map:
             print("make a house in ordinary fashion")
             h = (House(aType, aCoord, addRings))
 
-        # directly append h if we dont need to check for valid position
+        # directly append h if we don't need to check for valid position
         if not LoopUntilValid:
             self.house.append(h)
         else:
@@ -404,7 +404,7 @@ class Map:
             print("\n rings added: ", added_rings)
             newHouses.append(hCurrent)
 
-        # after all loopnig:
+        # after all looping:
         self.house = newHouses
 
 
@@ -511,8 +511,11 @@ def initHouseTypes(IterationMax=20):
         )
     return houseTypeList
 
+def save(map1):
 
-
+    with open("test1", 'wb') as myFile:
+        wr = csv.writer(myFile, quoting = csv.QUOTE_ALL)
+        wr.writerow(map1)
 """
 add a coordinate and a vector (movement representative) together
 - make a coordinate class/?????

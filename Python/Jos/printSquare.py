@@ -13,8 +13,7 @@ NOTE    this thing is an example of how to use helpers
 
 # TODO turn main into hillclimber
 # TODO save all values generated in .txt file
-# TODO make an algoritm which determines which ring is the most valuable to add, with value in price / m2
-
+# TODO make an algorithm which determines which ring is the most valuable to add, with value in price / m2
 
 from helpers import *
 
@@ -33,6 +32,7 @@ def main():
     for ht in reversed(housetypes):
         n = round(ht.frequency * SELECTED_HOUSE_COUNT)
         housetypelist += [ht] * n
+        ht.printRingInfo();
 
     # make a map
     map1 = Map()
@@ -44,6 +44,7 @@ def main():
         ht = housetypelist[i]
 
         # the add house function which i want
+        # (0,0) is a dummy value
         map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
 
     # add water to the map
@@ -58,7 +59,9 @@ def main():
     print("Total map value:", value)
 
     # draw the map a second time
+    save(map1)
     map1.plot()
+
 
 if __name__ == "__main__":
     main()
