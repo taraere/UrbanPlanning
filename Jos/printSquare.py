@@ -30,12 +30,9 @@ def main():
 
     # generate correct type parameters
     housetypelist = []
-    for ht in housetypes:
+    for ht in reversed(housetypes):
         n = round(ht.frequency * SELECTED_HOUSE_COUNT)
         housetypelist += [ht] * n
-
-    houstypelist = shuffle(housetypelist)
-    print(housetypelist)
 
     # make a map
     map1 = Map()
@@ -47,16 +44,17 @@ def main():
         ht = housetypelist[i]
 
         # the add house function which i want
-        map1.addHouse(ht, (0,0), 10, "non_colliding", "random_positions")
+        map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
 
-    # draw first time
-    map1.plot()
+    # add water to the map
+    map1.addWater()
 
     # make change all rings to its largest possible iteration
     map1.expandRings()
 
     # print value of map
     value = map1.calculateValue()
+    print()
     print("Total map value:", value)
 
     # draw the map a second time
