@@ -26,7 +26,7 @@ WATER_PERCENTAGE = 0.20         # percentage of total area covered by water
 MAX_BODIES       = 4            # maximum number of bodies
 MAX_RATIO        = 4            # l/b < x AND  b/l < x
 
-# house constances
+# house constants
 NAME           = ["Family",  "Bungalow", "Mansion"  ]
 FREQUENCY      = [0.60,      0.25,       0.15       ]
 VALUE          = [285000,    399000,     610000     ]
@@ -74,7 +74,7 @@ class HouseType:
         self.ring = list()
 
         # fill ring list with Ring objects
-        # TODO rewrite so that ringwidth and ring.width is less confusing
+        # TODO rewrite so that ring-width and ring.width is less confusing
 
         for ringWidth in range(self.baseRing, MaxRingIt):
 
@@ -207,7 +207,7 @@ class Rectangle:
                self.coord2)
                )
 
-    # TODO make method of comparissons:
+    # TODO make method of comparisons:
 
     # return true if self is touching any part of list of rectangles
     def isTouching(self, listOfRectangles):
