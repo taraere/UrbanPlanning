@@ -10,6 +10,14 @@ NOTE    the minimum distance to another home is represented by the name "ring",
 
 NOTE    isTouching()
 
+
+// TODO implement map.save() & map.load()
+
+
+
+
+
+
 """
 #import numpy as np
 import matplotlib
@@ -18,6 +26,7 @@ from matplotlib.patches import Rectangle as mathplot_rectangle
 import numpy as np
 from random import randint, shuffle, random, randrange, choice, uniform
 from collections import Iterable
+import operator
 
 # constances general
 AREA = (160, 180)
@@ -36,7 +45,7 @@ SITE           = [(8, 8),    (10, 7.5),  (11, 10.5 )]
 BASE_RING      = [2,         3,          6,         ]
 RING_INCREMENT = [0.03,      0.04,       0.06       ]
 COLOUR         = ["r",       'g',        'y'        ]
-
+INTEGER        = [0,         1,          2          ]
 
 ################################################################################
 """
@@ -47,9 +56,10 @@ Housetype Class
 
 class HouseType:
 
-    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt, aColour):
+    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt, aColour, anInteger):
 
         # base values
+        self.integer   = anInteger
         self.name      = aName
         self.frequency = aFrequency
         self.value     = aValue
@@ -129,10 +139,8 @@ class House:
         self.type = aType
         self.addRings = addRings
 
-        # select current ring
-        self.ring = self.type.ring[self.addRings]
-
         # calc house's lower- and upperbounds of x and y coordinates
+        # TODO these should be calculated in houseType
         self.xLower = self.type.ring[0].ringWidth
         self.yLower = self.type.ring[0].ringWidth
         self.xUpper = AREA[0] - self.type.ring[0].ringWidth - self.type.width
@@ -154,6 +162,9 @@ class House:
     def update(self):
         # calculate additional geometric information, based on init's current value
             # EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5.
+
+        # select current ring
+        self.ring = self.type.ring[self.addRings]
 
         # house geometry rep. boundary
         self.boundary = Rectangle(self.origin, self.type.width, self.type.height)
@@ -178,6 +189,17 @@ class House:
 
         # replace origin coordinate, and update other values accordingly
         self.origin = newCoord
+        self.update()
+
+        # change the |Additional Ring| value by |Increment|, error if addrings becomes negative (not allowed)
+    def changeRingsBy(self, increment):
+        # quit if addRings would become negative
+        if self.addRings + increment < 0:
+            print("ERROR: additional rings cannot become negative")
+            return
+
+        # add the increment, and update values
+        self.addRings += increment
         self.update()
 
 ###############################################################################
@@ -301,8 +323,6 @@ class Map:
         # init a boundary for collision testing
         self.boundary = Rectangle(self.coord1, self.width, self.height)
 
-
-
     """
     add a [aType] house to the map at [aCoord], with [addrings] rings
     """
@@ -413,10 +433,11 @@ class Map:
     """
     def addWater(self):
 
-        waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
-        print()
-        print("adding water...")
-        print(waterArea)
+        # TODO MAKE WATER FIT
+        # waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
+        # print()
+        # print("adding water...")
+        # print(waterArea)
 
         """
         # ingredients
@@ -426,8 +447,6 @@ class Map:
         Rectangle()
         self.waterBody = []
         """
-
-
         """
         pseudo
 
@@ -436,8 +455,6 @@ class Map:
                 change aspect ratio
                     if aspect ratio cant be changed any longer
                         repeat entire thing with 2 bodies of water
-
-
         ? when do i try smaller squares / rectangles
         """
 
@@ -488,6 +505,47 @@ class Map:
 
 
 
+    """ tara is on the case! """
+    def load():
+        # TODO
+        pass
+    def save():
+        # TODO
+        pass
+
+    """
+    USAGE
+
+    selected =
+    or
+    selected = map.findHouseWithMostValueRingIncrease()
+
+    map.house[selected].AddRings(1)
+
+
+    """
+    def findHouseWithMostLandValueRingIncrease(self):
+
+        housedata = []
+        # iterate through houses
+        for index, house in enumerate(self.house):
+            # get the landValue of the next ring
+            pair = (house.type.ring[house.addRings + 1].landValue, index)
+
+            # add data to list
+            housedata.append(pair)
+
+        # sort
+        print(housedata)
+        selected_house = max(housedata, key=operator.itemgetter(0))
+        print(selected_house)
+
+        return selected_house[1]
+
+
+
+
+
 
 ###############################################################################
 """
@@ -507,7 +565,7 @@ def initHouseTypes(IterationMax=20):
     for i,s in enumerate(NAME):
         houseTypeList.append(
             HouseType(NAME[i], FREQUENCY[i], VALUE[i], SITE[i], BASE_RING[i],
-                RING_INCREMENT[i], maximumRingIterations, COLOUR[i])
+                RING_INCREMENT[i], maximumRingIterations, COLOUR[i], INTEGER[i])
         )
     return houseTypeList
 
@@ -526,13 +584,8 @@ def moveCoord(coordinate, vector):
 
 
 
-
-
-
-
-
-
-
+# increase best ring of list of houses
+# returns the [i] of the houselist which needs a ring increase
 
 
 

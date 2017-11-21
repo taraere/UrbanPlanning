@@ -26,7 +26,7 @@ SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
 build a correct random map
 """
 def main():
-    housetypes = initHouseTypes(50)
+    housetypes = initHouseTypes(100)
 
     # generate correct type parameters
     housetypelist = []
@@ -44,13 +44,23 @@ def main():
         ht = housetypelist[i]
 
         # the add house function which i want
-        map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
+        map1.addHouse(ht, (0,0), 0, "random_positions", "non_colliding")
 
-    # add water to the map
+    # add water to the map (TODO)
     map1.addWater()
 
-    # make change all rings to its largest possible iteration
+    map1.plot()
+
     map1.expandRings()
+    #
+    # # keep increasing the best house
+    # for i in range(100):
+    #     selected = map1.findHouseWithMostLandValueRingIncrease()
+    #     map1.house[selected].changeRingsBy(1)
+    #     # if that house does not fit
+    #     if not map1.house[selected].fit()
+    #         # make it fit
+    #         map1.house[selected]
 
     # print value of map
     value = map1.calculateValue()
