@@ -15,7 +15,10 @@ NOTE    this thing is an example of how to use helpers
 # TODO save all values generated in .txt file
 # TODO make an algorithm which determines which ring is the most valuable to add, with value in price / m2
 
-from helpers import *
+from HouseType import *
+from House import *
+from Rectangle import *
+from Map import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
 SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]

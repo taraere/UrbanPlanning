@@ -2,25 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75ea04b7-a856-43a5-bf01-2b8040ba6ecf" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Saves/1.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Saves/10.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Saves/1000003.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Saves/34892.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Saves/9.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Saves/A - README.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Jos/Test3.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Junk/README.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/Junk/ringPriorities" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Python/amstelhaege.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/beunhaasArchitects-checkpoint.ipynb" afterPath="$PROJECT_DIR$/Presentations/beunhaasArchitects-checkpoint.ipynb" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Python/Jos/helpers.py" afterPath="$PROJECT_DIR$/helpers.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Python/Jos/printSquare.py" afterPath="$PROJECT_DIR$/printSquare.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Python/Junk/amstelhaegeTE.py" afterPath="$PROJECT_DIR$/amstelhaegeTE.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Python/Junk/ringPriorities.py" afterPath="$PROJECT_DIR$/Junk/ringPriorities.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Python/amstelhaegeTE.py" afterPath="$PROJECT_DIR$/amstelhaegeTE.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Python/mapCreator.py" afterPath="$PROJECT_DIR$/mapCreator.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/House.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Map.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Rectangle.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Junk/ringPriorities.py" afterPath="$PROJECT_DIR$/Previous/ringPriorities.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/Main.3dm" afterPath="$PROJECT_DIR$/Visualisations/Main.3dm" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/Main.3dmbak" afterPath="$PROJECT_DIR$/Visualisations/Main.3dmbak" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/building houses.gh" afterPath="$PROJECT_DIR$/Visualisations/building houses.gh" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/code v2.gh" afterPath="$PROJECT_DIR$/Visualisations/code v2.gh" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/code v3.gh" afterPath="$PROJECT_DIR$/Visualisations/code v3.gh" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/desktop.ini" afterPath="$PROJECT_DIR$/Visualisations/desktop.ini" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/1.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/1.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/2.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/2.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/3.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/3.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/4.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/4.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/5.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/5.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/6.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/6.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/7.jpg" afterPath="$PROJECT_DIR$/Visualisations/screens/7.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/MainActivitybackup.java" afterPath="$PROJECT_DIR$/Visualisations/screens/MainActivitybackup.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/desktop.ini" afterPath="$PROJECT_DIR$/Visualisations/screens/desktop.ini" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/knip1.PNG" afterPath="$PROJECT_DIR$/Visualisations/screens/knip1.PNG" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/knip2.PNG" afterPath="$PROJECT_DIR$/Visualisations/screens/knip2.PNG" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rhino/screens/knip3.PNG" afterPath="$PROJECT_DIR$/Visualisations/screens/knip3.PNG" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amstelhaegeTE.py" afterPath="$PROJECT_DIR$/Previous/amstelhaegeTE.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/helpers.py" afterPath="$PROJECT_DIR$/HouseType.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/mapCreator.py" afterPath="$PROJECT_DIR$/Previous/mapCreator.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/printSquare.py" afterPath="$PROJECT_DIR$/printSquare.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,33 +40,60 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="helpers.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpers.py">
+      <file leaf-file-name="HouseType.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HouseType.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="469" column="19" lean-forward="true" selection-start-line="469" selection-start-column="19" selection-end-line="469" selection-end-column="19" />
+            <state relative-caret-position="167">
+              <caret line="113" column="39" lean-forward="false" selection-start-line="113" selection-start-column="39" selection-end-line="113" selection-end-column="39" />
               <folding>
-                <element signature="e#313#344#0" expanded="true" />
+                <element signature="e#0#223#1" expanded="false" />
+                <element signature="e#224#255#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="Map.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Map.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-              <folding />
+            <state relative-caret-position="210">
+              <caret line="194" column="37" lean-forward="false" selection-start-line="194" selection-start-column="37" selection-end-line="194" selection-end-column="37" />
+              <folding>
+                <element signature="e#142#165#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="printSquare.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Rectangle.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Rectangle.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="House.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/House.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="735">
+              <caret line="49" column="32" lean-forward="true" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="printSquare.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/printSquare.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="60" column="29" lean-forward="false" selection-start-line="60" selection-start-column="29" selection-end-line="60" selection-end-column="29" />
+            <state relative-caret-position="231">
+              <caret line="19" column="23" lean-forward="true" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -66,12 +101,25 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>magic</find>
       <find>map(</find>
       <find>Map</find>
       <find>save</find>
+      <find>value</find>
+      <find>total map</find>
+      <find>value:</find>
+      <find>total</find>
+      <find>House</find>
+      <find>water</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -82,16 +130,22 @@
       <list>
         <option value="$PROJECT_DIR$/Python/helpers.py" />
         <option value="$PROJECT_DIR$/Python/ringPriorities.py" />
-        <option value="$PROJECT_DIR$/printSquare.py" />
         <option value="$PROJECT_DIR$/Python/printSquare.py" />
         <option value="$PROJECT_DIR$/Python/Jos/printSquare.py" />
         <option value="$PROJECT_DIR$/Python/Jos/helpers.py" />
         <option value="$PROJECT_DIR$/.ipynb_checkpoints/.gitignore" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/helpers.py" />
+        <option value="$PROJECT_DIR$/Notes/Rectangle.py" />
+        <option value="$PROJECT_DIR$/House.py" />
+        <option value="$PROJECT_DIR$/Map.py" />
+        <option value="$PROJECT_DIR$/HouseType.py" />
+        <option value="$PROJECT_DIR$/printSquare.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="853" />
+    <option name="width" value="1280" />
     <option name="height" value="800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -123,6 +177,48 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UrbanPlanning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UrbanPlanning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Saves" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UrbanPlanning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UrbanPlanning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Previous" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UrbanPlanning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UrbanPlanning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Notes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -131,6 +227,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/Previous" />
       <recent name="$PROJECT_DIR$/Presentations" />
       <recent name="$PROJECT_DIR$/Python" />
     </key>
@@ -148,24 +245,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.printSquare (2)">
-    <configuration default="false" name="mapCreator" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Python" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="UrbanPlanning" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mapCreatorCW.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="printSquare" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -220,6 +299,24 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
+    <configuration default="false" name="helpers" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="UrbanPlanning" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/HouseType.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
     <configuration default="false" name="printSquare (2)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -227,7 +324,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Python/Jos" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -304,19 +401,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.mapCreator" />
-      <item index="1" class="java.lang.String" itemvalue="Python.printSquare" />
-      <item index="2" class="java.lang.String" itemvalue="Python.ringPriorities" />
-      <item index="3" class="java.lang.String" itemvalue="Python.printSquare (1)" />
+      <item index="0" class="java.lang.String" itemvalue="Python.printSquare" />
+      <item index="1" class="java.lang.String" itemvalue="Python.ringPriorities" />
+      <item index="2" class="java.lang.String" itemvalue="Python.printSquare (1)" />
+      <item index="3" class="java.lang.String" itemvalue="Python.helpers" />
       <item index="4" class="java.lang.String" itemvalue="Python.printSquare (2)" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.printSquare (2)" />
-        <item index="1" class="java.lang.String" itemvalue="Python.printSquare (1)" />
-        <item index="2" class="java.lang.String" itemvalue="Python.ringPriorities" />
-        <item index="3" class="java.lang.String" itemvalue="Python.printSquare" />
-        <item index="4" class="java.lang.String" itemvalue="Python.mapCreator" />
+        <item index="1" class="java.lang.String" itemvalue="Python.helpers" />
+        <item index="2" class="java.lang.String" itemvalue="Python.printSquare (1)" />
+        <item index="3" class="java.lang.String" itemvalue="Python.ringPriorities" />
+        <item index="4" class="java.lang.String" itemvalue="Python.printSquare" />
       </list>
     </recent_temporary>
   </component>
@@ -335,11 +432,12 @@
   </component>
   <component name="TodoView" selected-index="3" />
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="853" height="800" extended-state="0" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43896425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32859176" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32714054" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32768363" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32627118" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32859176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -360,7 +458,6 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32859176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20358744" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -378,16 +475,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Jos/printSquare.py" />
     <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
     <entry file="file://$PROJECT_DIR$/Python/helpers.py" />
     <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
-    <entry file="file://$PROJECT_DIR$/Python/printSquare.py" />
-    <entry file="file://$PROJECT_DIR$/Python/helpers.py" />
-    <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
-    <entry file="file://$PROJECT_DIR$/Python/helpers.py" />
-    <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
-    <entry file="file://$PROJECT_DIR$/amstelhaegeTE.py">
+    <entry file="file://$PROJECT_DIR$/Previous/amstelhaegeTE.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -407,7 +498,7 @@
     <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
     <entry file="file://$PROJECT_DIR$/Python/helpers.py" />
     <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
-    <entry file="file://$PROJECT_DIR$/amstelhaegeTE.py">
+    <entry file="file://$PROJECT_DIR$/Previous/amstelhaegeTE.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -427,7 +518,7 @@
     <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
     <entry file="file://$PROJECT_DIR$/Python/helpers.py" />
     <entry file="file://$PROJECT_DIR$/mapCreatorCW.py" />
-    <entry file="file://$PROJECT_DIR$/amstelhaegeTE.py">
+    <entry file="file://$PROJECT_DIR$/Previous/amstelhaegeTE.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -444,28 +535,83 @@
     <entry file="file://$PROJECT_DIR$/Python/Jos/test1" />
     <entry file="file://$PROJECT_DIR$/Python/Jos/Saves/test2" />
     <entry file="file://$PROJECT_DIR$/Python/Jos/Saves/output1" />
-    <entry file="file://$PROJECT_DIR$/printSquare.py">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="60" column="29" lean-forward="false" selection-start-line="60" selection-start-column="29" selection-end-line="60" selection-end-column="29" />
+        <state relative-caret-position="60">
+          <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpers.py">
+    <entry file="file://$PROJECT_DIR$/Previous/mapCreator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="469" column="19" lean-forward="true" selection-start-line="469" selection-start-column="19" selection-end-line="469" selection-end-column="19" />
+        <state relative-caret-position="219">
+          <caret line="30" column="67" lean-forward="false" selection-start-line="30" selection-start-column="67" selection-end-line="30" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/House.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="49" column="32" lean-forward="true" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
           <folding>
-            <element signature="e#313#344#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/Rectangle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+        <state relative-caret-position="30">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Map.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="194" column="37" lean-forward="false" selection-start-line="194" selection-start-column="37" selection-end-line="194" selection-end-column="37" />
+          <folding>
+            <element signature="e#142#165#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HouseType.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="113" column="39" lean-forward="false" selection-start-line="113" selection-start-column="39" selection-end-line="113" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#223#1" expanded="false" />
+            <element signature="e#224#255#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Saves/12487020.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Saves/12504360.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printSquare.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="19" column="23" lean-forward="true" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
           <folding />
         </state>
       </provider>
