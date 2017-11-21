@@ -1,4 +1,3 @@
-from House import *
 from HouseType import *
 
 class Rectangle:
@@ -6,6 +5,7 @@ class Rectangle:
     rectangle class
     
     Methods:
+        
     toString()                              # turn self. information into string
     isTouching(|rectangle / rectangles|)    # test if self is touching ||
     isWithin(|rectangle / rectangles|)      # test if self is completely within ||

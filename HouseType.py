@@ -35,6 +35,19 @@ COLOUR         = ["r",       'g',        'y'        ]
 class HouseType:
     """
     HouseType Class
+    
+    Init:
+        name
+        frequency
+        value
+        site
+        base ring
+        ring increment (value increase)
+        max ring iteration (cannot be bigger than map)
+        color (to recognise houses more easily)
+    
+    Methods:
+        printRingInfo
     """
 
     def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt, aColour):

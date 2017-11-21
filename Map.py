@@ -1,16 +1,14 @@
-
-"""
-Map class which holds houses and has a method of printing them
-
-METHODS AND THEIR USE:
-self.addHouse(type, coord, rings)
-self.plot()
-"""
-from HouseType import *
 from House import *
 from Rectangle import *
 
 class Map:
+    """
+    Map class which holds houses and has a method of printing them
+    
+    METHODS AND THEIR USE:
+    self.addHouse(type, coord, rings)
+    self.plot()
+    """
 
     def __init__(self, coord1=(0,0), coord2=AREA):
         # init base values
@@ -191,8 +189,8 @@ class Map:
         with open(file_name , "wb") as f:
             writer = csv.writer(f)
             for house in self.house:
-                orig = house.origin
-            wr = writer.writerow(orig)
+                coor = house.aCoord
+            wr = writer.writerow(coor)
             print("Got here!")
             return wr
 

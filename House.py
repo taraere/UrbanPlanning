@@ -1,9 +1,14 @@
-from HouseType import *
 from Rectangle import *
 
 class House:
     """
     House Class
+    
+    Methods:
+        update          Calculate additional geometric information, based on init's current value
+                        EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5. 
+        move            Add vector and origin coordinate, and update other values accordingly
+        moveTo          Replace origin coordinate, and update other values accordingly
     """
 
     def __init__(self, aType, aCoord, addRings):
@@ -25,6 +30,8 @@ class House:
             random_x = round(uniform(self.xLower, self.xUpper) * 2) / 2
             random_y = round(uniform(self.yLower, self.yUpper) * 2) / 2
 
+            self.x = random_x
+            self.y = random_y
             self.origin = (random_x, random_y)
         else:
             self.origin = aCoord
@@ -33,8 +40,10 @@ class House:
         self.update()
 
     def update(self):
-        # calculate additional geometric information, based on init's current value
-            # EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5.
+        """ 
+        calculate additional geometric information, based on init's current value
+        EXAMPLE a fam.house with 3 add.rings gives a ringWidth of 5. 
+        """
 
         # house geometry rep. boundary
         self.boundary = Rectangle(self.origin, self.type.width, self.type.height)
@@ -60,5 +69,3 @@ class House:
         # replace origin coordinate, and update other values accordingly
         self.origin = newCoord
         self.update()
-
-###############################################################################
