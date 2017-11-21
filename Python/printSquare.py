@@ -121,15 +121,17 @@ def main2():
 
 def main3():
 
-    map1 = Map()
+    map = Map()
     house_scenario = initHouseTypes(20)
 
     for i in range(100):
         for hs in house_scenario:
-            map1.addHouse(hs, (0, 0), 10, "non_colliding", "random_positions")
+            map.addHouse(hs, (0, 0), 10, "non_colliding", "random_positions")
 
-    map1.plot()
+    map.plot()
     # save map to csv file
+
+
 
 if __name__ == "__main__":
     main3()
