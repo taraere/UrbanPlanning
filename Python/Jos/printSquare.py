@@ -59,8 +59,8 @@ def main():
     print("Total map value:", value)
 
     # draw the map a second time
-    save(map1)
     map1.plot()
+    map1.save()
 
 
 if __name__ == "__main__":

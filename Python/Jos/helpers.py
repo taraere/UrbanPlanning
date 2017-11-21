@@ -457,6 +457,16 @@ class Map:
     plot the full map with all houses. This code is hard to understand
     without understanding the mathplot.py libaries
     """
+
+    def save(self):
+
+        with open("Saves/output1", "wb") as f:
+            writer = csv.writer(f)
+            for house in self.house:
+                house.origin
+                house.housetype
+            writer.writerow(self)
+
     def plot(self):
 
         # TODO maybe draw borers
@@ -511,11 +521,7 @@ def initHouseTypes(IterationMax=20):
         )
     return houseTypeList
 
-def save(map1):
 
-    with open("test1", 'wb') as myFile:
-        wr = csv.writer(myFile, quoting = csv.QUOTE_ALL)
-        wr.writerow(map1)
 """
 add a coordinate and a vector (movement representative) together
 - make a coordinate class/?????
