@@ -2,6 +2,7 @@
 Beunhaas Architects
 by Tara, Christiaan, and Jos
 
+Week 1
 Three main issues presented themselves to us.
 1.  Overlapping
 
@@ -23,5 +24,26 @@ Three main issues presented themselves to us.
     This is concerned with how to value adding a meter to around the house and the space you will lose on the corners.
     Comparison between the benefit of losing a quarter of the loss on the corners with the gains you would get from
     the overlapping of four houses (maximum)
+    
 Most of all, we have to value different types square meters.
 This relationship is what the algorithm will priorisities the scenarios on.
+
+## State Space
+
+The lower bound of our problem is the minimum number of houses required of us without any extra space put around them. 
+This value is €7,245,000 with 20 houses without any rings added.
+
+`   # max number of iterations is 50 for placing
+    housetypes = initHouseTypes(50)
+
+    # generate correct type parameters
+    housetypelist = []
+    cumulativeValue = 0
+    for ht in housetypelist:
+        cumulativeValue += ht.value
+
+    print(cumulativeValue)
+`
+
+Our upper bound is harder to calculate. One approximation is to give a mansion (which holds the largest value) the largest number of rings 
+on the map which is possible, and push all of the other houses to the edges of map.
