@@ -33,7 +33,7 @@ This relationship is what the algorithm will priorisities the scenarios on.
 The lower bound of our problem is the minimum number of houses required of us without any extra space put around them. 
 This value is €7,245,000 with 20 houses without any rings added.
 
-`   # max number of iterations is 50 for placing
+    # max number of iterations is 50 for placing
     housetypes = initHouseTypes(50)
 
     # generate correct type parameters
@@ -43,7 +43,7 @@ This value is €7,245,000 with 20 houses without any rings added.
         cumulativeValue += ht.value
 
     print(cumulativeValue)
-`
+    
 
 Our upper bound is harder to calculate. One approximation is to give a mansion (which holds the largest value) the largest number of rings 
 on the map which is possible, and push all of the other houses to the edges of map.
