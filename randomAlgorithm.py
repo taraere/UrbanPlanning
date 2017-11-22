@@ -15,7 +15,8 @@ NOTE    this thing is an example of how to use helpers
 # TODO save all values generated in .txt file
 # TODO make an algorithm which determines which ring is the most valuable to add, with value in price / m2
 
-from helpers import *
+
+from Map import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
 SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
@@ -37,31 +38,31 @@ def main():
     # make a map
     map1 = Map()
 
-    # add a number of houses to map
-    for i in range(SELECTED_HOUSE_COUNT):
+    for j in range(100):
 
-        # get current housetype
-        ht = housetypelist[i]
+        # add a number of houses to map
+        for i in range(SELECTED_HOUSE_COUNT):
 
-        # the add house function which i want
-        # (0,0) is a dummy value
-        map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
+            # get current house-type
+            ht = housetypelist[i]
 
-    # add water to the map
-    map1.addWater()
+            # the add house function which i want
+            # (0,0) is a dummy value
+            map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
 
-    # make change all rings to its largest possible iteration
-    map1.expandRings()
+        # add water to the map
+        map1.addWater()
 
-    # print value of map
-    value = map1.calculateValue()
-    print()
-    print("Total map value:", value)
+        # make change all rings to its largest possible iteration
+        map1.expandRings()
 
-    # draw the map a second time
-    map1.plot()
-    map1.save()
+        # print value of map
+        value = map1.calculateValue()
+        print("\nTotal map value:", value)
 
+        # draw the map a second time
+        map1.save()
+        # map1.plot()
 
 if __name__ == "__main__":
     main()
