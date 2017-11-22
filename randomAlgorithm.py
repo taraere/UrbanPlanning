@@ -38,30 +38,31 @@ def main():
     # make a map
     map1 = Map()
 
-    # add a number of houses to map
-    for i in range(SELECTED_HOUSE_COUNT):
+    for j in range(100):
 
-        # get current house-type
-        ht = housetypelist[i]
+        # add a number of houses to map
+        for i in range(SELECTED_HOUSE_COUNT):
 
-        # the add house function which i want
-        # (0,0) is a dummy value
-        map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
+            # get current house-type
+            ht = housetypelist[i]
 
-    # add water to the map
-    map1.addWater()
+            # the add house function which i want
+            # (0,0) is a dummy value
+            map1.addHouse(ht, (0,0), 15, "non_colliding", "random_positions")
 
-    # make change all rings to its largest possible iteration
-    map1.expandRings()
+        # add water to the map
+        map1.addWater()
 
-    # print value of map
-    value = map1.calculateValue()
-    print()
-    print("Total map value:", value)
+        # make change all rings to its largest possible iteration
+        map1.expandRings()
 
-    # draw the map a second time
-    # map1.plot()
-    map1.save()
+        # print value of map
+        value = map1.calculateValue()
+        print("\nTotal map value:", value)
+
+        # draw the map a second time
+        map1.save()
+        # map1.plot()
 
 if __name__ == "__main__":
     main()

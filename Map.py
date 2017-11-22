@@ -191,18 +191,15 @@ class Map:
         """
 
         file_name = "Saves/" + str(self.calculateValue()) + ".csv"
-        with open(file_name , "wb") as f:
-            listOfPoints = []
+        with open(file_name , "w"):
+            locationList = []
             for house in self.houses:
                 row = [house.origin[0], house.origin[1], house.type.name]
-                listOfPoints.append(row)
-            print(listOfPoints)
-            writer = pandas.DataFrame(listOfPoints, columns=["x-co-ordinate", "y-co-ordinate", "house-type"])
+                locationList.append(row)
+            writer = pandas.DataFrame(locationList, columns=["x-co-ordinate", "y-co-ordinate", "house-type"])
             writer.to_csv(file_name, index=False)
 
     def plot(self):
-
-        # TODO maybe draw borders
 
         # init figure and axes
         fig = plt.figure()

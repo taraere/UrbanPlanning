@@ -124,6 +124,7 @@ class HouseType:
 
 """
 FUNCTIONS
+
 This area is for functions with are not part of classes
 
 instantiate the 3 house-type objects
