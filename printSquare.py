@@ -41,7 +41,7 @@ def main():
     # add a number of houses to map
     for i in range(SELECTED_HOUSE_COUNT):
 
-        # get current housetype
+        # get current house-type
         ht = housetypelist[i]
 
         # the add house function which i want
@@ -60,7 +60,7 @@ def main():
     print("Total map value:", value)
 
     # draw the map a second time
-    map1.plot()
+    # map1.plot()
     map1.save()
 
 if __name__ == "__main__":

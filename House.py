@@ -30,8 +30,6 @@ class House:
             random_x = round(uniform(self.xLower, self.xUpper) * 2) / 2
             random_y = round(uniform(self.yLower, self.yUpper) * 2) / 2
 
-            self.x = random_x
-            self.y = random_y
             self.origin = (random_x, random_y)
         else:
             self.origin = aCoord
@@ -55,7 +53,7 @@ class House:
         # house ring rep. boundary
         self.ringboundary = Rectangle(ringOrigin, self.ring.x, self.ring.y)
 
-        # make some synonymes for lazy use
+        # make some synonyms for lazy use
         self.coord = self.origin
 
     def move(self, vector):

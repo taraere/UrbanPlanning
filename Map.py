@@ -1,3 +1,5 @@
+import pandas
+
 from House import *
 from Rectangle import *
 
@@ -18,7 +20,7 @@ class Map:
         self.height = coord2[1] - coord1[1]
 
         # init lists to fill with objects
-        self.house = []
+        self.houses = []
         houseIndex = 0
         self.waterBody = []
 
@@ -27,31 +29,33 @@ class Map:
 
 
 
-    """
-    add a [aType] house to the map at [aCoord], with [addrings] rings
-    """
     def addHouseStupid(self, aType, aCoord, addRings):
-        # simple way of creating a house
-        self.house.append(House(aType, aCoord, addRings))
+        """
+        add a [aType] house to the map at [aCoord], with [addrings] rings
+        """
 
-    """
-    add a [aType] house to the map at [aCoord], with [addrings] rings
-    the following options are usable:
-        ["non_colliding"]
-            pick random house locations until the position is valid.
-        ["random_positions"]
-            place house at a random starting location
-        ["Tactical_fit"]
-            TODO
-    """
+        # simple way of creating a house
+        self.houses.append(House(aType, aCoord, addRings))
+
     def addHouse(self, aType, aCoord, addRings, *options):
+        """
+        add a [aType] house to the map at [aCoord], with [addrings] rings
+        the following options are usable:
+            ["non_colliding"]
+                pick random house locations until the position is valid.
+            ["random_positions"]
+                place house at a random starting location
+            ["Tactical_fit"]
+                TODO
+        """
+
         # index
         # TODO add index to houses
         # apply options
         LoopUntilValid = False
         if any(option == "non_colliding" for option in options):
-            print()
-            print("make a house without colliding")
+            # print()
+            print("\n make a house without colliding")
             LoopUntilValid = True
         if any(option == "random_positions" for option in options):
             print("make house at a random location")
@@ -62,13 +66,13 @@ class Map:
 
         # directly append h if we don't need to check for valid position
         if not LoopUntilValid:
-            self.house.append(h)
+            self.houses.append(h)
         else:
             # if we do need to check if placement is valid
             relocateCounter = 0
             MAX_ITERATIONS = 50000
             # list of squares to test with
-            allRings = [house.ringboundary for house in self.house]
+            allRings = [house.ringboundary for house in self.houses]
 
             while(True):
 
@@ -83,14 +87,15 @@ class Map:
                     h = (House(aType, "random", addRings))
                 else:
                     # correct placement
-                    self.house.append(h)
+                    self.houses.append(h)
                     print("Times Relocated: ", relocateCounter)
                     break
 
-    """
-    Expand all rings to their maximum possible value.
-    """
     def expandRings(self):
+        """
+        Expand all rings to their maximum possible value.
+        """
+
         # NOTE this code might also work with coordinate distances, distance to edge etc, and then floor() the minimal answer
 
         print("\n Expanding rings...")
@@ -99,9 +104,9 @@ class Map:
         newHouses = []
 
         # per imbedded hosue
-        for house in self.house:
+        for house in self.houses:
             # TODO do while loop?????
-            houses = self.house
+            houses = self.houses
 
             # count number of rings added
             added_rings = []
@@ -111,7 +116,7 @@ class Map:
             hNew = (House(house.type, house.origin, house.addRings + 1))
 
             # save boundaries of all embedded houses
-            allBoundaries = [testhouse.boundary for testhouse in self.house if testhouse.origin != house.origin]
+            allBoundaries = [testhouse.boundary for testhouse in self.houses if testhouse.origin != house.origin]
 
             # the new ring is valid when its completely within map boundaries,
             # and not any house can be touching this new ringboundary
@@ -129,17 +134,17 @@ class Map:
             newHouses.append(hCurrent)
 
         # after all looping:
-        self.house = newHouses
+        self.houses = newHouses
 
 
-    """
-    Add water to the map.
-    """
     def addWater(self):
+        """
+        Add water to the map.
+        """
 
         waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
-        print()
-        print("adding water...")
+        # print()
+        print("\nadding water...")
         print(waterArea)
 
         """
@@ -165,47 +170,48 @@ class Map:
         ? when do i try smaller squares / rectangles
         """
 
-    """
-    Determine the value of the land.
-    """
     def calculateValue(self):
+        """
+        Determine the value of the land.
+        """
         total = 0
         # per house
-        for house in self.house:
+        for house in self.houses:
             # add house's cumulative value of the current ring
             total += house.ring.cumValue
 
         return total
 
-    """
-    plot the full map with all houses. This code is hard to understand
-    without understanding the mathplot.py libaries
-    """
 
     @property
     def save(self):
+        """
+        plot the full map with all houses. This code is hard to understand
+        without understanding the mathplot.py libaries
+        """
 
         file_name = "Saves/" + str(self.calculateValue()) + ".csv"
         with open(file_name , "wb") as f:
-            writer = csv.writer(f)
-            for house in self.house:
-                coor = house.aCoord
-            wr = writer.writerow(coor)
-            print("Got here!")
-            return wr
+            listOfPoints = []
+            for house in self.houses:
+                row = [house.origin[0], house.origin[1], house.type.name]
+                listOfPoints.append(row)
+            print(listOfPoints)
+            writer = pandas.DataFrame(listOfPoints, columns=["x-co-ordinate", "y-co-ordinate", "house-type"])
+            writer.to_csv(file_name, index=False)
 
     def plot(self):
 
-        # TODO maybe draw borers
+        # TODO maybe draw borders
 
         # init figure and axes
         fig = plt.figure()
-        ax = fig.add_subplot(111, aspect='equal')
+        ax = fig.add_subplot(111, aspect = 'equal')
 
         # get rectangle information out of houses
         houseBound_list = []
         ringBound_list  = []
-        for house in self.house:
+        for house in self.houses:
             rec1 = mathplot_rectangle(house.boundary.coord1, house.boundary.width, house.boundary.height, 0, fc=house.type.colour)
             rec2 = mathplot_rectangle(house.ringboundary.coord1, house.ringboundary.width, house.ringboundary.height, 0, fc=house.type.colour, alpha=0.2)
             ax.add_patch(rec1)
