@@ -14,7 +14,8 @@ NOTE    isTouching()
 // TODO implement map.save() & map.load()
 
 
-
+# TODO houseType(object)
+# Products
 
 
 
@@ -27,15 +28,19 @@ import numpy as np
 from random import randint, shuffle, random, randrange, choice, uniform
 from collections import Iterable
 import operator
+from math import sqrt
 
 # constances general
 AREA = (160, 180)
 HOUSE_COUNT = [20, 40, 60]
 
 # water
-WATER_PERCENTAGE = 0.20         # percentage of total area covered by water
-MAX_BODIES       = 4            # maximum number of bodies
-MAX_RATIO        = 4            # l/b < x AND  b/l < x
+WATER_PERCENTAGE  = 0.20         # percentage of total area covered by water
+MAX_BODIES        = 4            # maximum number of bodies
+RATIO_UPPER_BOUND = 4            # l/b < x AND  b/l < x
+RATIO_LOWER_BOUND = 1 / RATIO_UPPER_BOUND
+WATER_COLOUR      = "b"
+STARTING_WATER_ITERATION_SIZE = 0.80
 
 # house constances
 NAME           = ["Family",  "Bungalow", "Mansion"  ]
@@ -54,7 +59,7 @@ Housetype Class
 
 # TODO bouw water
 
-class HouseType:
+class HouseType(object):
 
     def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt, aColour, anInteger):
 
@@ -120,6 +125,12 @@ class HouseType:
             # add Ring object r to list ring
             self.ring.append(r)
 
+        # calc house's lower- and upperbounds of x and y coordinates
+        self.xLower = self.ring[0].ringWidth
+        self.yLower = self.ring[0].ringWidth
+        self.xUpper = AREA[0] - self.ring[0].ringWidth - self.width
+        self.yUpper = AREA[1] - self.ring[0].ringWidth - self.height
+
     def printRingInfo(self):
         print()
         print(self.name)
@@ -129,28 +140,21 @@ class HouseType:
             print(printstr.format(r.ringWidth, r.x, r.y, r.area, r.landValue, r.cumArea, r.cumValue, r.cumLandValue ))
         print((len(printstr) - 4) * "-")
 
-################################################################################
-"""
-House Class
-"""
-class House:
+##########################################################################
 
+class House(object):
+    """
+    House Class
+    """
     def __init__(self, aType, aCoord, addRings):
         self.type = aType
         self.addRings = addRings
 
-        # calc house's lower- and upperbounds of x and y coordinates
-        # TODO these should be calculated in houseType
-        self.xLower = self.type.ring[0].ringWidth
-        self.yLower = self.type.ring[0].ringWidth
-        self.xUpper = AREA[0] - self.type.ring[0].ringWidth - self.type.width
-        self.yUpper = AREA[1] - self.type.ring[0].ringWidth - self.type.height
-
         # assign either a random coordinate, or assign given coordinate
         if aCoord == "random":
             # randomize numbers, with 0.5 precision
-            random_x = round(uniform(self.xLower, self.xUpper) * 2) / 2
-            random_y = round(uniform(self.yLower, self.yUpper) * 2) / 2
+            random_x = round(uniform(self.type.xLower, self.type.xUpper) * 2) / 2
+            random_y = round(uniform(self.type.yLower, self.type.yUpper) * 2) / 2
 
             self.origin = (random_x, random_y)
         else:
@@ -185,10 +189,19 @@ class House:
         self.origin = moveCoord(self.origin, vector)
         self.update()
 
-    def moveTo(self, newCoord):
+    def relocate(self, aCoord):
+        """ probably the same as moveTo """
 
-        # replace origin coordinate, and update other values accordingly
-        self.origin = newCoord
+        if aCoord == "random":
+            # randomize numbers, with 0.5 precision
+            random_x = round(uniform(self.type.xLower, self.type.xUpper) * 2) / 2
+            random_y = round(uniform(self.type.yLower, self.type.yUpper) * 2) / 2
+
+            self.origin = (random_x, random_y)
+        else:
+            self.origin = aCoord
+
+        # update house data
         self.update()
 
         # change the |Additional Ring| value by |Increment|, error if addrings becomes negative (not allowed)
@@ -202,18 +215,110 @@ class House:
         self.addRings += increment
         self.update()
 
-###############################################################################
+##########################################################################
 
-"""
-rectangle class
+class WaterBody(object):
+    """
+    Water Class
+    """
+    def __init__(self, aCoord, aSurface, aRatio): #coord as tuple (x, y), surface as m2,
+        # STATIC create ratio's array, and an array sorted by probability
+        # 0.25 , 0.50, 0.75, 1, 2, 3, 4
+        highN = [i/1 for i in range(2, RATIO_UPPER_BOUND + 1)]
+        lowN  = [i / RATIO_UPPER_BOUND for i in range(1, RATIO_UPPER_BOUND + 1)]
+        self.ratioList = lowN + highN
+        ratioSortedList = highN + lowN
 
-Methods:
-toString()                              # turn self. information into string
-isTouching(|rectangle / rectangles|)    # test if self is touching ||
-isWithin(|rectangle / rectangles|)      # test if self is completely within ||
-"""
-class Rectangle:
 
+        # assign either a random ratio, or assign given ratio
+        if aRatio == "random":
+            # pick a random number from the list
+            self.ratio = choice(self.ratioList)
+        else:
+            # test ratio
+            if not (RATIO_LOWER_BOUND <= aRatio <= RATIO_UPPER_BOUND):
+                print("ERROR: ratio out of bound: <{}, {}>".format(RATIO_LOWER_BOUND, RATIO_UPPER_BOUND))
+                return
+            self.ratio = aRatio
+
+        # assign either a random coordinate, or assign given coordinate
+        if aCoord == "random":
+            # randomize numbers, with 0.5 precision, upperbound not precise, will need to check if valid move
+            random_x = round(uniform(0, AREA[0]) * 2) / 2
+            random_y = round(uniform(0, AREA[1]) * 2) / 2
+            self.origin = (random_x, random_y)
+        else:
+            self.origin = aCoord
+
+        # test surface
+        if (aSurface <= 0):
+            print("ERROR: surface must be non-zero positive")
+            return
+        self.surface = aSurface
+
+        # update geometric information
+        self.update()
+
+    def update(self):
+
+        # TODO fix rounding stuff, floats are slow and inaccurate
+
+        # update width & height
+        self.width  = sqrt(self.surface / self.ratio)
+        self.height = sqrt(self.surface * self.ratio)
+
+        # update rectangle information
+        self.boundary = Rectangle(self.origin, self.width, self.height)
+
+        # lower and upper bounds could be done for coord's sake
+
+    def changeLocation(self, aCoord):
+        """
+        the following three methods change 1 of the 3 initial values and
+        updates all other values accordinly
+        """
+        # assign either a random coordinate, or assign given coordinate
+        if aCoord == "random":
+            # randomize numbers, with 0.5 precision, upperbound not precise, will need to check if valid move
+            random_x = round(uniform(0, AREA[0]) * 2) / 2
+            random_y = round(uniform(0, AREA[1]) * 2) / 2
+
+            self.origin = (random_x, random_y)
+        else:
+            self.origin = aCoord
+        self.update()
+
+    def changeRatio(self, aRatio):
+
+        if aRatio == "random":
+            # pick a random number from the list
+            self.ratio = choice(self.ratioList)
+        else:
+            # test ratio
+            if not (RATIO_LOWER_BOUND <= aRatio <= RATIO_UPPER_BOUND):
+                print("ERROR: ratio out of bound: <{}, {}>".format(RATIO_LOWER_BOUND, RATIO_UPPER_BOUND))
+                return
+            self.ratio = aRatio
+        self.update()
+
+    def changeSurface(self, aSurface):
+        if (aSurface <= 0):
+            print("ERROR: surface must be non-zero positive")
+            return
+        self.surface = aSurface
+        self.update()
+##########################################################################
+
+
+class Rectangle(object):
+    """
+    rectangle class
+
+    Methods:
+    toString()                              # turn self. information into string
+    isTouching(|rectangle / rectangles|)    # test if self is touching ||
+    isWithin(|rectangle / rectangles|)      # test if self is completely within ||
+    """
     def __init__(self, OriginCoord, width, height):
 
         self.width = width
@@ -238,47 +343,57 @@ class Rectangle:
                self.coord2)
                )
     # return true if self is touching any part of list of rectangles
-    def isTouching(self, listOfRectangles):
-
-        # TODO make it so a single rectangle also works
-        if not isinstance(listOfRectangles, Iterable):
-            listOfRectangles = [listOfRectangles]
-
-        # calculate per boundary coordinate
-        for bound_coord in self.bound_coords:
-            # per rectangle in given list of rectangles
-            for rec in listOfRectangles:
-
-                # rename bound coord for the sake of clear names
-                x = bound_coord[0]
-                y = bound_coord[1]
-                # print(bound_coord)
-                # print(rec.x1, rec.x2, rec.y1, rec.y2)
-                # print(rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2)
-                # if self. boundary coord is inside of rec. boundaries
-                if rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2:
-                    return True
-
-                # test the other way around
-                for rec_bound in rec.bound_coords:
-
-                    # if rec. boundary coord is within self. boundaries
-                    if self.x1 < rec_bound[0] < self.x2 and self.y1 < rec_bound[1] < self.y2:
-                        return True
-
-        # if code falls down till this part, none of the rectangles are touching self
-        return False
+    # def isTouching(self, listOfRectangles):
+        #
+        # # empty list means its not touching them
+        # if not listOfRectangles:
+        #     return False
+        #
+        # # make it so a single rectangle also works
+        # if not isinstance(listOfRectangles, Iterable):
+        #     listOfRectangles = [listOfRectangles]
+        #
+        # # calculate per boundary coordinate
+        # for bound_coord in self.bound_coords:
+        #     # per rectangle in given list of rectangles
+        #     for rec in listOfRectangles:
+        #
+        #         # rename bound coord for the sake of clear names
+        #         x = bound_coord[0]
+        #         y = bound_coord[1]
+        #         # print(bound_coord)
+        #         # print(rec.x1, rec.x2, rec.y1, rec.y2)
+        #         # print(rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2)
+        #         # if self. boundary coord is inside of rec. boundaries
+        #         if rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2:
+        #             return True
+        #
+        #         # test the other way around
+        #         for rec_bound in rec.bound_coords:
+        #
+        #             # if rec. boundary coord is within self. boundaries
+        #             if self.x1 < rec_bound[0] < self.x2 and self.y1 < rec_bound[1] < self.y2:
+        #                 return True
+        #
+        # # if code falls down till this part, none of the rectangles are touching self
+        # return False
 
     # return true if self is completely within list of rectangles
     def isWithin(self, listOfRectangles):
+
+        # if list is emtry, rectangle is not within it
+        if not listOfRectangles:
+            return False
+
+        # make it so a single rectangle also works
+        if not isinstance(listOfRectangles, Iterable):
+            listOfRectangles = [listOfRectangles]
 
         # get self' 4 boundary coordinates
         bound_coords = [(x, y) for x in [self.x1, self.x2]
                                for y in [self.y1, self.y2]]
 
-        # TODO make it so a single rectangle also works
-        if not isinstance(listOfRectangles, Iterable):
-            listOfRectangles = [listOfRectangles]
+
 
         # calculate per boundary coordinate
         for bound_coord in bound_coords:
@@ -296,17 +411,51 @@ class Rectangle:
         # if code falls down till this part, position is correct
         return True
 
+    # return true if self is touching any part of list of rectangles
+    def isTouching(self, listOfRectangles):
 
-###############################################################################
+        # empty list means its not overlapping
+        if not listOfRectangles:
+            return False
 
-"""
-Map class which holds houses and has a method of printing them
+        # make it so a single rectangle also works
+        if not isinstance(listOfRectangles, Iterable):
+            listOfRectangles = [listOfRectangles]
 
-METHODS AND THEIR USE:
-self.addHouse(type, coord, rings)
-self.plot()
-"""
-class Map:
+        # for better readability
+        A = self
+
+        # rectangle B (other)
+        for B in listOfRectangles:
+            # both 'an X coord' and 'a Y coord' of B need to be within the respective bounds of A if they touch.
+            # this can be writen shorter, but this is the most readable
+
+            if ((A.x1 < B.x1 < A.x2      # one of my x's are within your x's
+            or   A.x1 < B.x2 < A.x2
+            or   B.x1 < A.x1 < B.x2      # one of your x's are within my x's
+            or   B.x1 < A.x2 < B.x2)
+            and
+                (A.y1 < B.y1 < A.y2      # one of my y's are within your y's
+            or   A.y1 < B.y2 < A.y2
+            or   B.y1 < A.y1 < B.y2      # one of your y's are within my y's
+            or   B.y1 < A.y2 < B.y2)):
+                return True
+
+        # if code falls down till this part, none of the rectangles are overlapping with self
+        return False
+
+
+##########################################################################
+
+
+class Map(object):
+    """
+    Map class which holds houses and has a method of printing them
+
+    METHODS AND THEIR USE:
+    self.addHouse(type, coord, rings)
+    self.plot()
+    """
 
     def __init__(self, coord1=(0,0), coord2=AREA):
         # init base values
@@ -317,7 +466,7 @@ class Map:
 
         # init lists to fill with objects
         self.house = []
-        houseIndex = 0
+        # houseIndex = 0
         self.waterBody = []
 
         # init a boundary for collision testing
@@ -376,17 +525,17 @@ class Map:
                 if h.boundary.isTouching(allRings):
                     # incorrect placement
                     relocateCounter += 1
-                    h = (House(aType, "random", addRings))
+                    h.relocate("random")
                 else:
                     # correct placement
                     self.house.append(h)
                     print("Times Relocated: ", relocateCounter)
                     break
 
-    """
-    Expand all rings to their maximum possible value.
-    """
     def expandRings(self):
+        """
+        Expand all rings to their maximum possible value.
+        """
         # NOTE this code might also work with coordinate distances, distance to edge etc, and then floor() the minimal answer
 
         print("\n Expanding rings...")
@@ -427,41 +576,88 @@ class Map:
         # after all loopnig:
         self.house = newHouses
 
-
-    """
-    Add water to the map.
-    """
     def addWater(self):
-
-        # TODO MAKE WATER FIT
-        # waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
-        # print()
-        # print("adding water...")
-        # print(waterArea)
-
         """
-        # ingredients
-        WATER_PERCENTAGE = 0.20         # percentage of total area covered by water
-        MAX_BODIES       = 4            # maximum number of bodies
-        MAX_RATIO        = 4            # l/b < x AND  b/l < x
-        Rectangle()
-        self.waterBody = []
-        """
-        """
-        pseudo
-
-        iterate with a body of water
-            if fitting in loop times out,
-                change aspect ratio
-                    if aspect ratio cant be changed any longer
-                        repeat entire thing with 2 bodies of water
-        ? when do i try smaller squares / rectangles
+        Add water to the map.
         """
 
-    """
-    Determine the value of the land.
-    """
+        # calculate water m2 needed
+        waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
+
+        # feedback
+        print()
+        print("adding {} m2 of water...".format(waterArea))
+
+        # determines chosen TestSizes in while loop. change to make the algorithm more accurate / slow
+        DECREMENT = round(-0.05 * waterArea)
+        STARTING_SIZE = round(0.80 * waterArea)
+
+        # init values to keep track of
+        bodiesLeft = MAX_BODIES
+        waterLeft = waterArea
+
+        # init waterBody, to prevent memory overload
+        wb = WaterBody("random", STARTING_SIZE, "random")
+
+        # and testSize * waterArea >= 1 / MAX_BODIES;
+        testSize = STARTING_SIZE
+        while (testSize * bodiesLeft >= waterLeft and waterLeft != 0):  # macro while loop
+
+            # test
+            print(testSize / waterArea)
+            # test current area size
+            wb.changeSurface(testSize)
+
+            # iteration values
+            MAX_TRIES = 1000
+            tries = 0
+            succeeded = False
+            while(tries < MAX_TRIES):    # micro while loop
+                # if the waterbody isnt touching any houses or other bodies, and is within the map
+                if (not wb.boundary.isTouching([h.boundary for h in self.house]) and not
+                        wb.boundary.isTouching([w.boundary for w in self.waterBody]) and
+                        wb.boundary.isWithin(self.boundary)):
+                    # the waterbody is correct
+                    succeeded = True
+                    break
+
+                # else, change the values of wb, and try again
+                wb.changeRatio("random")
+                wb.changeLocation("random")
+                tries += 1
+
+            if succeeded:
+                # success micro while loop: update counters, save wb, and build a 'new' wb
+                bodiesLeft -= 1
+                self.waterBody.append(wb)
+                waterLeft -= testSize
+                if waterLeft < testSize:
+                    testSize = waterLeft
+
+                # feedback
+                print("Placed water.")
+                print("water left: {}".format(waterLeft))
+
+                if waterLeft <= 0:
+                    # sucess macro while loop:
+                    print("Done!")
+                    return 0
+
+                # no decrement, macro while loop should try to fit the same size somewhere else
+                wb = WaterBody("random", testSize, "random")
+            else:
+                # make the wb smaller
+                testSize += DECREMENT
+
+        # if macro while loop runs out, water could not be placed...
+        print("Failed to add water...")
+        self.waterBody.clear()
+        return 1
+
     def calculateValue(self):
+        """
+        Determine the value of the land.
+        """
         total = 0
         # per house
         for house in self.house:
@@ -470,23 +666,25 @@ class Map:
 
         return total
 
-    """
-    plot the full map with all houses. This code is hard to understand
-    without understanding the mathplot.py libaries
-    """
     def plot(self):
-
+        """
+        plot the full map with all houses. This code is hard to understand
+        without understanding the mathplot.py libaries
+        """
         # TODO maybe draw borers
 
         # init figure and axes
         fig = plt.figure()
         ax = fig.add_subplot(111, aspect='equal')
 
-        # get rectangle information out of houses
-        houseBound_list = []
-        ringBound_list  = []
+        # add water to the map
+        for body in self.waterBody:
+            rec1 = mathplot_rectangle(body.boundary.coord1, body.boundary.width, body.boundary.height, 0, fc=WATER_COLOUR, alpha=0.5)
+            ax.add_patch(rec1)
+
+        # add houses to the map with rings
         for house in self.house:
-            rec1 = mathplot_rectangle(house.boundary.coord1, house.boundary.width, house.boundary.height, 0, fc=house.type.colour)
+            rec1 = mathplot_rectangle(house.boundary.coord1, house.boundary.width, house.boundary.height, 0, fc=house.type.colour, edgecolor='k',linewidth=1)
             rec2 = mathplot_rectangle(house.ringboundary.coord1, house.ringboundary.width, house.ringboundary.height, 0, fc=house.type.colour, alpha=0.2)
             ax.add_patch(rec1)
             ax.add_patch(rec2)
@@ -503,8 +701,6 @@ class Map:
         # draw the board
         plt.show()
 
-
-
     """ tara is on the case! """
     def load():
         # TODO
@@ -516,12 +712,13 @@ class Map:
     """
     USAGE
 
-    selected =
-    or
-    selected = map.findHouseWithMostValueRingIncrease()
-
-    map.house[selected].AddRings(1)
-
+    selected = map.findHouseWithMostLandValueRingIncrease()
+    map.house[selected].changeRingsBy(1)
+    while(True)
+        if not house[selected].isCorrect():
+            house[selected].relocate("random")
+        else:
+            break
 
     """
     def findHouseWithMostLandValueRingIncrease(self):

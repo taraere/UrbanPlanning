@@ -9,7 +9,18 @@ DESC    STATE SPACE estimation calculation
 
 NOTE    this thing is an example of how to use helpers
 """
+"""
+HEURISTICS NOTES
 
+prefer placing houses with the same type together
+    prefer placing houses which perfectly fit together
+prefer placing houses on edges of other houses or water
+prefer placing houses so they fit perfectly in AREA boundaries
+prefer to place as much 'extra free space' off the edge of the AREA boundaries
+
+group houses, consider them as 1 (moldable) puzzle piece
+
+"""
 
 # TODO turn main into hillclimber
 # TODO save all values generated in .txt file
@@ -19,7 +30,7 @@ NOTE    this thing is an example of how to use helpers
 from helpers import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
-SELECTED_HOUSE_COUNT = HOUSE_COUNT[0]
+SELECTED_HOUSE_COUNT = 30 # HOUSE_COUNT[0]
 
 
 """
@@ -44,12 +55,10 @@ def main():
         ht = housetypelist[i]
 
         # the add house function which i want
-        map1.addHouse(ht, (0,0), 0, "random_positions", "non_colliding")
+        map1.addHouse(ht, (0,0), 10, "random_positions", "non_colliding")
 
     # add water to the map (TODO)
     map1.addWater()
-
-    map1.plot()
 
     map1.expandRings()
     #
@@ -58,9 +67,14 @@ def main():
     #     selected = map1.findHouseWithMostLandValueRingIncrease()
     #     map1.house[selected].changeRingsBy(1)
     #     # if that house does not fit
-    #     if not map1.house[selected].fit()
-    #         # make it fit
-    #         map1.house[selected]
+    #     while(not house[selected].isCorrect()):
+    #         house[selected].relocate("random")
+    #         relocatecounter += 1
+    #         if relocatecounter > 1000:
+    #             break
+
+
+
 
     # print value of map
     value = map1.calculateValue()
