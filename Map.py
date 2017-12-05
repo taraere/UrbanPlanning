@@ -200,7 +200,6 @@ class Map:
             writer.to_csv(file_name, index=False)
 
     def plot(self):
-
         # init figure and axes
         fig = plt.figure()
         ax = fig.add_subplot(111, aspect = 'equal')
@@ -225,5 +224,6 @@ class Map:
 
         # draw the board
         plt.show()
+
 
 
