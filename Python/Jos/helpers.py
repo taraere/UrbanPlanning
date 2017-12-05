@@ -21,6 +21,7 @@ NOTE    isTouching()
 
 """
 #import numpy as np
+from copy import copy
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle as mathplot_rectangle
@@ -29,6 +30,8 @@ from random import randint, shuffle, random, randrange, choice, uniform
 from collections import Iterable
 import operator
 from math import sqrt
+import json
+import os
 
 # constances general
 AREA = (160, 180)
@@ -40,7 +43,7 @@ MAX_BODIES        = 4            # maximum number of bodies
 RATIO_UPPER_BOUND = 4            # l/b < x AND  b/l < x
 RATIO_LOWER_BOUND = 1 / RATIO_UPPER_BOUND
 WATER_COLOUR      = "b"
-STARTING_WATER_ITERATION_SIZE = 0.80
+STARTING_WATER_ITERATION_SIZE = 1.00
 
 # house constances
 NAME           = ["Family",  "Bungalow", "Mansion"  ]
@@ -51,6 +54,9 @@ BASE_RING      = [2,         3,          6,         ]
 RING_INCREMENT = [0.03,      0.04,       0.06       ]
 COLOUR         = ["r",       'g',        'y'        ]
 INTEGER        = [0,         1,          2          ]
+
+# Path to save json files
+jsonPATH = "C:\\Users\\Jos\\GitHub\\UrbanPlanning\\Rhino\\json"
 
 ################################################################################
 """
@@ -100,7 +106,7 @@ class HouseType(object):
             # turn r into Ring object
             r = Ring()
 
-            # calc land value in € / m2, and calc other attributes
+            # calc land value in  / m2, and calc other attributes
             r.ringWidth = ringWidth                  # synoniem
             r.x = ringWidth * 2 + self.width
             r.y = ringWidth * 2 + self.height
@@ -189,23 +195,74 @@ class House(object):
         self.origin = moveCoord(self.origin, vector)
         self.update()
 
-    def relocate(self, aCoord):
+    def relocate(self, aCoord, *edges):
         """ probably the same as moveTo """
 
         if aCoord == "random":
-            # randomize numbers, with 0.5 precision
-            random_x = round(uniform(self.type.xLower, self.type.xUpper) * 2) / 2
-            random_y = round(uniform(self.type.yLower, self.type.yUpper) * 2) / 2
+            # pick a random coordinate, with type coord bounds and 0.5 precision
+            self.origin = randomCoord((self.type.xLower, self.type.yLower),
+                                      (self.type.xUpper, self.type.yUpper))
 
-            self.origin = (random_x, random_y)
+        elif aCoord == "random_on_edge": # TODO
+            # oh boy here we go TODO placement is missing a few possibilites!!!
+            # RANDOMNESS IS NOW INCORRECT: algorithm first randomly chooeses edge, then coord, TODO should be joined endevor
+            edges = edges[0]
+            picked = np.random.choice(range(len(edges)))
+
+            # pick a random edge & coord on that edge
+            edge = edges[picked]
+
+            # the highest ring width should be the minimum distance the house should move
+            ringSelf = self.ring.ringWidth
+            ringOther = edge[2]
+            ring = max(ringSelf, ringOther)
+
+            # TODO something has to be done here
+            coordLowBound  = (edge[0][0], edge[0][1])
+            coordHighBound = (edge[1][0], edge[1][1])
+            coord = randomCoord(coordLowBound, coordHighBound)
+
+            # test
+            # print("ring = {}".format(ring))
+            # print("coord = {}".format(coord))
+
+            # # determine direction, and change origin coord accordingly
+            direction = edge[3]
+            if direction == "T": # coord should move up
+                newcoord = (coord[0], coord[1] + ring)
+            elif direction == "D": # coord should move down
+                newcoord = (coord[0], coord[1] - (ring + self.type.height))
+            elif direction == "L": # coord should move left
+                newcoord = (coord[0] + ring, coord[1])
+            elif direction == "R": # coord should move right
+                newcoord = (coord[0] - (ring + self.type.width), coord[1])
+
+            # make special exeptions for placement on map edges
+            elif direction == "Tm": # coord should move up
+                newcoord = randomCoord((self.type.xLower, self.type.yUpper), (self.type.xUpper, self.type.yUpper))
+            elif direction == "Dm": # coord should move down
+                newcoord = randomCoord((self.type.xLower, self.type.yLower), (self.type.xUpper, self.type.yLower))
+            elif direction == "Lm": # coord should move left
+                newcoord = randomCoord((self.type.xLower, self.type.yLower), (self.type.xLower, self.type.yUpper))
+            elif direction == "Rm": # coord should move right
+                newcoord = randomCoord((self.type.xUpper, self.type.yLower), (self.type.xUpper, self.type.yUpper))
+            else:
+                # something went wrong
+                print("ERROR: random_on_edge: incorrect direction given, cannot continue...")
+                while(True):
+                    pass
+
+            # assign the coord
+            self.origin = newcoord
         else:
+            # assign the given coord
             self.origin = aCoord
 
         # update house data
         self.update()
 
-        # change the |Additional Ring| value by |Increment|, error if addrings becomes negative (not allowed)
     def changeRingsBy(self, increment):
+        # change the |Additional Ring| value by |Increment|, error if addrings becomes negative (not allowed)
         # quit if addRings would become negative
         if self.addRings + increment < 0:
             print("ERROR: additional rings cannot become negative")
@@ -214,6 +271,34 @@ class House(object):
         # add the increment, and update values
         self.addRings += increment
         self.update()
+
+    def moveUntilValid(self, listOfRectangles, limit):
+
+        # if it does not fit
+        iteration = 0
+        while(iteration < limit):
+
+            # if self isnt touching anything anymore
+            if not self.ringboundary.isTouching(listOfRectangles):
+
+                # its correct
+                return True
+
+            # prepare for next iteration
+            self.relocate("random")
+            iteration += 1
+
+        # if code falls through here, could not place house
+        return False
+
+    def isWithinMap(self):
+        if (self.type.xLower <= self.origin[0] <= self.type.xUpper and
+            self.type.yLower <= self.origin[1] <= self.type.yUpper):
+            # house is within map
+            return True
+
+        # else, its not
+        return False
 
 ##########################################################################
 
@@ -307,12 +392,14 @@ class WaterBody(object):
             return
         self.surface = aSurface
         self.update()
-##########################################################################
 
+##########################################################################
 
 class Rectangle(object):
     """
     rectangle class
+
+    this class is key to the speed of all algorithms, edit with caution
 
     Methods:
     toString()                              # turn self. information into string
@@ -332,55 +419,19 @@ class Rectangle(object):
         self.y2 = self.y1 + height
         self.coord2 = (self.x2, self.y2)
 
-        # get self' 4 boundary coordinates
-        self.bound_coords = [(x, y) for x in [self.x1, self.x2]
-                                    for y in [self.y1, self.y2]]
-
-    # turn some of rectangles variables to string to test
     def toString(self):
-        return ("Rectangle.coord1: {} \n Rectangle.coord2: {} \n".format(
+        """
+        turn some of rectangles variables to string to test
+        """
+        return ("Rectangle.coord1: {} \nRectangle.coord2: {} \n".format(
                self.coord1,
                self.coord2)
                )
-    # return true if self is touching any part of list of rectangles
-    # def isTouching(self, listOfRectangles):
-        #
-        # # empty list means its not touching them
-        # if not listOfRectangles:
-        #     return False
-        #
-        # # make it so a single rectangle also works
-        # if not isinstance(listOfRectangles, Iterable):
-        #     listOfRectangles = [listOfRectangles]
-        #
-        # # calculate per boundary coordinate
-        # for bound_coord in self.bound_coords:
-        #     # per rectangle in given list of rectangles
-        #     for rec in listOfRectangles:
-        #
-        #         # rename bound coord for the sake of clear names
-        #         x = bound_coord[0]
-        #         y = bound_coord[1]
-        #         # print(bound_coord)
-        #         # print(rec.x1, rec.x2, rec.y1, rec.y2)
-        #         # print(rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2)
-        #         # if self. boundary coord is inside of rec. boundaries
-        #         if rec.x1 < x < rec.x2 and rec.y1 < y < rec.y2:
-        #             return True
-        #
-        #         # test the other way around
-        #         for rec_bound in rec.bound_coords:
-        #
-        #             # if rec. boundary coord is within self. boundaries
-        #             if self.x1 < rec_bound[0] < self.x2 and self.y1 < rec_bound[1] < self.y2:
-        #                 return True
-        #
-        # # if code falls down till this part, none of the rectangles are touching self
-        # return False
 
-    # return true if self is completely within list of rectangles
     def isWithin(self, listOfRectangles):
-
+        """
+        return true if self is completely within list of rectangles
+        """
         # if list is emtry, rectangle is not within it
         if not listOfRectangles:
             return False
@@ -392,8 +443,6 @@ class Rectangle(object):
         # get self' 4 boundary coordinates
         bound_coords = [(x, y) for x in [self.x1, self.x2]
                                for y in [self.y1, self.y2]]
-
-
 
         # calculate per boundary coordinate
         for bound_coord in bound_coords:
@@ -411,9 +460,10 @@ class Rectangle(object):
         # if code falls down till this part, position is correct
         return True
 
-    # return true if self is touching any part of list of rectangles
     def isTouching(self, listOfRectangles):
-
+        """
+        return true if self is touching any part of list of rectangles
+        """
         # empty list means its not overlapping
         if not listOfRectangles:
             return False
@@ -444,17 +494,55 @@ class Rectangle(object):
         # if code falls down till this part, none of the rectangles are overlapping with self
         return False
 
+    def getEdges(self, ringWidth):
+
+        # order: TDLR
+        self.edges = [[(self.x1, self.y2), (self.x2, self.y2), ringWidth, "T"],  # top range
+                      [(self.x1, self.y1), (self.x2, self.y1), ringWidth, "D"],  # bottom/down range
+                      [(self.x2, self.y1), (self.x2, self.y2), ringWidth, "L"],  # left range
+                      [(self.x1, self.y1), (self.x1, self.y2), ringWidth, "R"]]  # right range
+        return self.edges
+
+    def getEdgesFlipped(self, ringWidth):
+
+        # order: DTRL, the direction is flipped
+        self.edges = [[(self.x1, self.y2), (self.x2, self.y2), ringWidth, "D"],  # top range
+                      [(self.x1, self.y1), (self.x2, self.y1), ringWidth, "T"],  # bottom/down range
+                      [(self.x2, self.y1), (self.x2, self.y2), ringWidth, "R"],  # right range
+                      [(self.x1, self.y1), (self.x1, self.y2), ringWidth, "L"]]  # left range
+        return self.edges
+
+    def getBoundCoords(self):
+
+        # only recalculate if it is meaningful??? check this later
+        self.bound_coords = [(x, y) for x in [self.x1, self.x2]
+                                    for y in [self.y1, self.y2]]
+
+        return self.bound_coords
+
 
 ##########################################################################
-
 
 class Map(object):
     """
     Map class which holds houses and has a method of printing them
 
     METHODS AND THEIR USE:
-    self.addHouse(type, coord, rings)
-    self.plot()
+    Map(|coord1|=(0,0), |coord2|=(AREA))             # defines the surface area of the map
+    addHouseStupid(type, coord, rings)               # this could be deleted, its a raw way of adding a house, without any further calculations
+    addHouse(type, coord, rings, *args)              # create a house in a certain smart version, for options, see the method description
+    plot()                                           # plot all significant geometric information loaded into the map using mathplotlib
+    expandRings()                                    # expand the rings to their maximum allowed expantion, in other words, calculate value after this for actual map value
+    addWater()                                       # water add algorithm, using random locations and configurations. It tries to squeeze in water in between existing geometry
+    calculateValueEstimate()                         # estimate map value using the currently placed rings
+    calculateValue()                                 # the actual value of the map is calculated here, regardless of rings present
+    getEdges(ringWidth)                              # used by FitInOnEdge algorithm, dont delete, but unimportant
+    load()                                           # tara's on the case!
+    save()                                           # tara's on the case!
+    findHouseWithMostLandValueRingIncrease()         # THIS IS THE RING ADDER, it returns the index of the house with the best next ring
+    areConstraintsSatisfied()                        # a final check, returns true if all map conditions are met
+    rebuild( RUNTIME_LIMIT_MAP, RUNTIME_LIMIT_HOUSE) # place all houses on the map again with a certain guaranteed free space, and try to make them fit
+    saveJSON(self, nameOfFile)                       # save map to a json file with a certain name, can be used to make a real time rhino visualisation
     """
 
     def __init__(self, coord1=(0,0), coord2=AREA):
@@ -472,37 +560,36 @@ class Map(object):
         # init a boundary for collision testing
         self.boundary = Rectangle(self.coord1, self.width, self.height)
 
-    """
-    add a [aType] house to the map at [aCoord], with [addrings] rings
-    """
     def addHouseStupid(self, aType, aCoord, addRings):
+        """
+        add a [aType] house to the map at [aCoord], with [addrings] rings
+        """
+
         # simple way of creating a house
         self.house.append(House(aType, aCoord, addRings))
 
-    """
-    add a [aType] house to the map at [aCoord], with [addrings] rings
-    the following options are usable:
-        ["non_colliding"]
-            pick random house locations until the position is valid.
-        ["random_positions"]
-            place house at a random starting location
-        ["Tactical_fit"]
-            TODO
-    """
     def addHouse(self, aType, aCoord, addRings, *options):
-        # index
-        # TODO add index to houses
+        """
+        add a [aType] house to the map at [aCoord], with [addrings] rings
+        the following options are usable:
+            ["non_colliding"]
+                pick random house locations until the position is valid.
+            ["random_positions"]
+                place house at a random starting location
+            ["Tactical_fit"]
+                TODO
+        """
+
         # apply options
         LoopUntilValid = False
         if any(option == "non_colliding" for option in options):
-            print()
-            print("make a house without colliding")
+            # print("make a house without colliding")
             LoopUntilValid = True
         if any(option == "random_positions" for option in options):
-            print("make house at a random location")
+            # print("make house at a random location")
             h = (House(aType, "random", addRings))
         else:
-            print("make a house in ordinary fashion")
+            # print("make a house in ordinary fashion")
             h = (House(aType, aCoord, addRings))
 
         # directly append h if we dont need to check for valid position
@@ -516,7 +603,6 @@ class Map(object):
             allRings = [house.ringboundary for house in self.house]
 
             while(True):
-
                 # make iteration upper bound
                 if relocateCounter > MAX_ITERATIONS:
                     print("Cannot place house...")
@@ -529,7 +615,7 @@ class Map(object):
                 else:
                     # correct placement
                     self.house.append(h)
-                    print("Times Relocated: ", relocateCounter)
+                    # print("Times Relocated: ", relocateCounter)
                     break
 
     def expandRings(self):
@@ -570,7 +656,7 @@ class Map(object):
                 hNew = (House(hCurrent.type, hCurrent.origin, hCurrent.addRings + 1))
 
             # if it is not possible, quit loop
-            print("\n rings added: ", added_rings)
+            # print(" rings added: ", added_rings)
             newHouses.append(hCurrent)
 
         # after all loopnig:
@@ -580,7 +666,6 @@ class Map(object):
         """
         Add water to the map.
         """
-
         # calculate water m2 needed
         waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
 
@@ -641,7 +726,7 @@ class Map(object):
                 if waterLeft <= 0:
                     # sucess macro while loop:
                     print("Done!")
-                    return 0
+                    return True
 
                 # no decrement, macro while loop should try to fit the same size somewhere else
                 wb = WaterBody("random", testSize, "random")
@@ -652,9 +737,60 @@ class Map(object):
         # if macro while loop runs out, water could not be placed...
         print("Failed to add water...")
         self.waterBody.clear()
-        return 1
+        return False
 
     def calculateValue(self):
+        """
+        Determine the value of the land.
+        """
+        total = 0
+
+        # per house
+        # firstly, get all corners
+        allCorners = []
+        for house in self.house:
+            bounds = house.boundary.getBoundCoords()
+            allCorners.append(bounds)
+
+        # secondly, extract correct comparrisonlist out of these lists
+        # bart help wat is effectiever
+
+        # 1 deze
+        # testList = [1,2,3,4,5]
+        # for i, houseCorners in enumerate(testList):
+        #     otherCorners = copy(testList)
+        #     del otherCorners[i]
+        #     print("dit huis: {}".format(houseCorners))
+        #     print("de rest: {}".format(otherCorners))
+        #
+        # 2 of deze
+
+        #
+        for i in range(len(allCorners)):
+            # create lists with the house in question, and all other houses
+            otherCorners = copy(allCorners)
+            houseCorners = otherCorners.pop(i)
+
+            # flatten list
+            otherCoords = [coord for otherHouse in otherCorners for coord in otherHouse]
+            # print("dit huis: {}".format(houseCorners))
+            # print("de rest: {}".format(otherCorners))
+
+            print(otherCoords)
+            for hc in houseCorners:
+                pass
+
+
+
+        # thirdly, per comparrison, store smallest distance
+        for house in self.house:
+
+            # add house's cummilative value of the current ring
+            total += house.ring.cumValue
+
+        return total
+
+    def calculateValueEstimate(self):
         """
         Determine the value of the land.
         """
@@ -666,16 +802,164 @@ class Map(object):
 
         return total
 
+    def getEdges(self, ringWidth):
+        """
+        returns the edge list of the map
+        the map edges work differently, to this method
+        TODO: this is fucking stupid right now, needs to be fixed in less stupid fashion
+        """
+        # order: TDLR
+        return [[(0,0), (0,0), 0, "Tm"],  # top range
+                [(0,0), (0,0), 0, "Dm"],  # bottom/down range
+                [(0,0), (0,0), 0, "Lm"],  # left range
+                [(0,0), (0,0), 0, "Rm"]]  # right range
+
+    """ tara is on the case! """
+    def load():
+        # TODO
+        pass
+    def save():
+        # TODO
+        pass
+
+    def findHouseWithMostLandValueRingIncrease(self):
+
+        housedata = []
+        # iterate through houses
+        for index, house in enumerate(self.house):
+            # get the landValue of the next ring
+            pair = (house.type.ring[house.addRings + 1].landValue, index)
+
+            # add data to list
+            housedata.append(pair)
+
+        # sort
+        # print(housedata)
+        selected_house = max(housedata, key=operator.itemgetter(0))
+        # print(selected_house)
+
+        return selected_house[1]
+
+    def areConstraintsSatisfied(self):
+        # NOTE THIS IS REALLY SLOW, MEANT AS A LAST CHECK
+        # NOTE this method judges the map based upon the current rings
+        for house in self.house:
+
+            # all houses with selection excluded, and waterbodies
+            otherBounds = [h.ringboundary for h in self.house if h is not house]
+            otherBounds.extend([wb.boundary for wb in self.waterBody])
+
+            # check if this house's ringboundary is touching any other selected boundaries
+            if house.boundary.isTouching(otherBounds):
+                print("map not satisfied: houseTouch")
+                return False
+
+            # check if the house is outside of map boundaries
+            if not house.isWithinMap():
+                print("map not satisfied: houseWithin")
+                return False
+
+        # go through all waterbodies
+        for waterBody in self.waterBody:
+
+            # NOTE houses do not need to be checked, done before
+
+            # all water with selection excluded
+            otherWaterBounds = [wb.boundary for wb in self.waterBody if wb is not waterBody]
+
+            # check if this body of water isnt touching other waterbodies
+            if waterBody.boundary.isTouching(otherWaterBounds):
+                print("map not satisfied: WaterTouch")
+                return False
+
+            # check if this body of water is not completely within the map
+            if not waterBody.boundary.isWithin(self.boundary):
+                print("map not satisfied: WaterWithin")
+                return False
+
+        # if code falls to this point, map is correct
+        return True
+
+    def rebuild(self, RUNTIME_LIMIT_MAP, RUNTIME_LIMIT_HOUSE):
+        """
+        rebuild the map in random fashion with 1000 tries.
+
+        NOTE instantiating new houses for example a thousand times takes up
+             alot of memory, so instead this algorithm moves houses around.
+        """
+
+        # try LIMIT amound of times
+        iterationMap = 0
+        while(iterationMap < RUNTIME_LIMIT_MAP):
+
+            # create a quick way to go to the next map try
+            nextMap = False
+
+            # build list from newly placed houses to compare with
+            compareBoundaries = []
+            compareRingBoundaries = []
+            edges = self.getEdges(0)
+            iterationMap += 1
+
+            # go trough all houses
+            for house in self.house:
+
+                # relocate regardless of correct or not
+                house.relocate("random_on_edge", edges)
+                iterationHouse = 0
+
+                # while this house is incorrectly placed
+                while(house.boundary.isTouching(compareRingBoundaries) or
+                      house.ringboundary.isTouching(compareBoundaries) or
+                      not house.isWithinMap()):
+
+                    # if house iterations have reached their upper limit
+                    if iterationHouse >= RUNTIME_LIMIT_HOUSE:
+                        nextMap = True
+                        break
+
+                    # try a new position
+                    iterationHouse += 1
+                    house.relocate("random_on_edge", edges)
+
+                # goto next map iteration
+                if nextMap == True:
+                    break
+
+                # else house is correct, add it to comparrison list
+                compareBoundaries.append(house.boundary)
+                compareRingBoundaries.append(house.ringboundary)
+                edges.extend(house.boundary.getEdges(house.ring.ringWidth))
+
+            # goto next map iteration
+            if nextMap == True:
+                continue
+
+            # else map is correct
+            return True
+
+        # if code falls though here, map could not be
+        print("map.rebuild Runtime Error")
+        return False
+
     def plot(self):
         """
-        plot the full map with all houses. This code is hard to understand
-        without understanding the mathplot.py libaries
+        plot the full map with all houses, implementing mathplotlib.
         """
         # TODO maybe draw borers
 
         # init figure and axes
         fig = plt.figure()
         ax = fig.add_subplot(111, aspect='equal')
+
+        # determine title and subtitles
+        fig.suptitle('HEURISTICS: Amstelhaege', fontsize=14, fontweight='bold')
+
+        # write subtitle based upon map's correctness
+        if self.areConstraintsSatisfied():
+            ax.set_title("Map value: {:,}".format(self.calculateValueEstimate()))
+        else:
+            ax.set_title("MAP IS INCORRECT | Map value: {:,}".format(self.calculateValueEstimate()), color='red')
 
         # add water to the map
         for body in self.waterBody:
@@ -701,48 +985,71 @@ class Map(object):
         # draw the board
         plt.show()
 
-    """ tara is on the case! """
-    def load():
-        # TODO
-        pass
-    def save():
-        # TODO
-        pass
+    def saveJSON(self, nameOfFile):
 
-    """
-    USAGE
+        # move to the right directory if needed
+        if os.getcwd() is not jsonPATH:
+            os.chdir(jsonPATH)
 
-    selected = map.findHouseWithMostLandValueRingIncrease()
-    map.house[selected].changeRingsBy(1)
-    while(True)
-        if not house[selected].isCorrect():
-            house[selected].relocate("random")
-        else:
-            break
+        # construct a dictonary of map data
+        data = {}
 
-    """
-    def findHouseWithMostLandValueRingIncrease(self):
+        # add metadata
+        data['map'] = []
+        data['map'].append({
+            'width': AREA[0],
+            'height': AREA[1]
+        })
 
-        housedata = []
-        # iterate through houses
-        for index, house in enumerate(self.house):
-            # get the landValue of the next ring
-            pair = (house.type.ring[house.addRings + 1].landValue, index)
+        # convert map's houses to json
+        data['houses'] = []
+        for house in self.house:
+            data['houses'].append({
+                'x1'  : house.origin[0],
+                'y1'  : house.origin[1],
+                'type': house.type.name,
+                'int': house.type.integer,
+                'ring': house.ring.ringWidth
+            })
 
-            # add data to list
-            housedata.append(pair)
+        # convert map's waterbodies to json
+        data['water'] = []
+        for water in self.waterBody:
+            data['water'].append({
+                'x1'  : water.boundary.x1,
+                'y1'  : water.boundary.y1,
+                'x2'  : water.boundary.x2,
+                'y2'  : water.boundary.y2
+            })
 
-        # sort
-        print(housedata)
-        selected_house = max(housedata, key=operator.itemgetter(0))
-        print(selected_house)
-
-        return selected_house[1]
-
+        # store data in json file
+        j = json.dumps(data, indent=4)
+        f = open(nameOfFile, 'w')
+        f.write(j)
+        f.close()
 
 
 
+        ## Save our changes to JSON file
+        # jsonFile = open("henk", "w")
+        # if not jsonFile:
+        #     print("could not open!")
+        # jsonFile.write(json.dumps(data))
+        # jsonFile.close()
+        #
+        # with open("replayScript.json", "w") as jsonFile:
+        #     json.dump(data, jsonFile)
+        # with open('henk.txt', 'w+') as outfile:
+        #     json.dump(data, outfile)
+        #     json.dumps(data)
+        #     print(json.dumps(data, indent=4))
 
+##########################################################################
+
+"""
+HEURISTIC STATEMENT: THE MORE OVERLAP THE BETTER -> it means a tighter fit
+            IDEA: per house, search for best placement = placement with the most overlap
+"""
 
 ###############################################################################
 """
@@ -766,20 +1073,24 @@ def initHouseTypes(IterationMax=20):
         )
     return houseTypeList
 
-
-
-"""
-add a coordinate and a vector (movement representative) together
-- make a coordinate class/?????
-"""
 def moveCoord(coordinate, vector):
+    """
+    add a coordinate and a vector (movement representative) together
+    """
     return tuple(sum(x) for x in zip(coordinate, vector))
+    # pick a random coord w
 
+def randomCoord(lowestCoord, highestCoord):
+    """
+    pick a random coordinate,
+    """
+    # pick a x value
+    random_x = round(uniform(lowestCoord[0], highestCoord[0]) * 2) / 2
 
+    # pick a y value
+    random_y = round(uniform(lowestCoord[1], highestCoord[1]) * 2) / 2
 
-
-
-
+    return (random_x, random_y)
 
 # increase best ring of list of houses
 # returns the [i] of the houselist which needs a ring increase

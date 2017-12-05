@@ -30,7 +30,7 @@ group houses, consider them as 1 (moldable) puzzle piece
 from helpers import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
-SELECTED_HOUSE_COUNT = 30 # HOUSE_COUNT[0]
+SELECTED_HOUSE_COUNT = 20 # HOUSE_COUNT[0]
 
 
 """
@@ -55,24 +55,45 @@ def main():
         ht = housetypelist[i]
 
         # the add house function which i want
-        map1.addHouse(ht, (0,0), 10, "random_positions", "non_colliding")
+        map1.addHouse(ht, (0,0), 0, "random_positions", "non_colliding")
 
     # add water to the map (TODO)
-    map1.addWater()
+    # map1.addWater()
 
-    map1.expandRings()
+    # map1.expandRings()
+
+    MACRO_LIMIT = 400
+    MICRO_LIMIT = 10000
     #
     # # keep increasing the best house
-    # for i in range(100):
-    #     selected = map1.findHouseWithMostLandValueRingIncrease()
-    #     map1.house[selected].changeRingsBy(1)
-    #     # if that house does not fit
-    #     while(not house[selected].isCorrect()):
-    #         house[selected].relocate("random")
-    #         relocatecounter += 1
-    #         if relocatecounter > 1000:
-    #             break
+    for i in range(MACRO_LIMIT):
 
+        selected = map1.findHouseWithMostLandValueRingIncrease()
+        houseSelected = map1.house[selected]
+        houseSelected.changeRingsBy(1)
+
+        # keep track of counter
+        relocatecounter = 0
+
+        # iterate through all houses
+
+        for checkHouse in map1.house:
+
+            # allHouseBoundariesMinusCheckHouse = []
+            otherbounds = [h.boundary for h in map1.house if h.origin != checkHouse.origin]
+
+            # if it does not fit
+            if houseSelected.ringboundary.isTouching(checkHouse.boundary):
+                succes = checkHouse.moveUntilValid(otherbounds, MICRO_LIMIT)
+                if not succes:
+                    print("ERROORORORORORORO")
+
+
+
+        # once every 100 ringincreases, print map
+        if (i % 30 == 0):
+            print("iterations: {}".format(i))
+            map1.plot()
 
 
 
