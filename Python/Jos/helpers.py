@@ -765,9 +765,9 @@ class Map(object):
         #
         # 2 of deze
 
-        #
+        # per house
         for i in range(len(allCorners)):
-            # create lists with the house in question, and all other houses
+            # create the house in question, and all other houses
             otherCorners = copy(allCorners)
             houseCorners = otherCorners.pop(i)
 
@@ -776,9 +776,11 @@ class Map(object):
             # print("dit huis: {}".format(houseCorners))
             # print("de rest: {}".format(otherCorners))
 
-            print(otherCoords)
+            # per coord of the selected house
             for hc in houseCorners:
-                pass
+
+                # now, check distances hc vs. otherCoords
+                otherCoords
 
 
 
