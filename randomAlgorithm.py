@@ -33,7 +33,7 @@ def main():
     for ht in reversed(housetypes):
         n = round(ht.frequency * SELECTED_HOUSE_COUNT)
         housetypelist += [ht] * n
-        ht.printRingInfo();
+        ht.printRingInfo()
 
     # make a map
     map1 = Map()
@@ -64,5 +64,15 @@ def main():
         map1.save()
         # map1.plot()
 
+def main1():
+    housetypes = initHouseTypes(50)
+
+    # generate correct type parameters
+    housetypelist = []
+    for ht in reversed(housetypes):
+        n = round(ht.frequency * SELECTED_HOUSE_COUNT)
+        housetypelist += [ht] * n
+        ht.printRingInfo();
+
 if __name__ == "__main__":
-    main()
+    main1()
