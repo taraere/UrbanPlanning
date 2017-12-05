@@ -183,52 +183,52 @@ def main():
     START_AT = 370
     # PRINT_AT = 1
 
-    map1.calculateValue()
+    # map1.saveJSON("henk.txt")
+    # map1.calculateValue()
 
+    # keep increasing the best house
+    for i in range(MACRO_LIMIT):
 
-    # # keep increasing the best house
-    # for i in range(MACRO_LIMIT):
-    #
-    #     # smart ring increase process
-    #     selected = map1.findHouseWithMostLandValueRingIncrease()
-    #     houseSelected = map1.house[selected]
-    #     houseSelected.changeRingsBy(1)
-    #
-    #     # keep track of counter
-    #     relocatecounter = 0
-    #
-    #     # all House Boundaries Minus houseSelected
-    #     otherBounds = [h.boundary for h in map1.house if h is not houseSelected]
-    #
-    #     if i < START_AT:
-    #         continue
-    #
-    #     # if it does not fit
-    #     if houseSelected.ringboundary.isTouching(otherBounds):
-    #
-    #         # try to rebuild the entire map, if that fails, error
-    #         print("rebuilding map. Iteration: {}".format(i))
-    #         if not map1.rebuild(LIMIT_MAP_REBUILT, LIMIT_HOUSE_RELOCATE):
-    #             print("Failed to rebuild at iteration {}, Runtime Error, cannot continue...".format(i))
-    #             # wait for ctrl + c command
-    #             return 0
-    #
-    #     # once every x ringincreases, print map
-    #     #if (i % PRINT_AT == 0 and i != 0):
-    #     print("iterations: {}".format(i))
-    #
-    #     # enhancements
-    #     tries = 0
-    #     # while(not map1.addWater()):
-    #     #     tries += 1
-    #     #     print("try again. tries = {}".format(tries))
-    #     #     if tries >= 100:
-    #     #         break
-    #     # map1.expandRings()
-    #     map1.saveJSON("henk.txt")
-    #     # map1.expandRings()
-    #     # ap1.plot()
-    #     map1.waterBody.clear()
+        # smart ring increase process
+        selected = map1.findHouseWithMostLandValueRingIncrease()
+        houseSelected = map1.house[selected]
+        houseSelected.changeRingsBy(1)
+
+        # keep track of counter
+        relocatecounter = 0
+
+        # all House Boundaries Minus houseSelected
+        otherBounds = [h.boundary for h in map1.house if h is not houseSelected]
+
+        if i < START_AT:
+            continue
+
+        # if it does not fit
+        if houseSelected.ringboundary.isTouching(otherBounds):
+
+            # try to rebuild the entire map, if that fails, error
+            print("rebuilding map. Iteration: {}".format(i))
+            if not map1.rebuild(LIMIT_MAP_REBUILT, LIMIT_HOUSE_RELOCATE):
+                print("Failed to rebuild at iteration {}, Runtime Error, cannot continue...".format(i))
+                # wait for ctrl + c command
+                return 0
+
+        # once every x ringincreases, print map
+        #if (i % PRINT_AT == 0 and i != 0):
+        print("iterations: {}".format(i))
+
+        # enhancements
+        tries = 0
+        # while(not map1.addWater()):
+        #     tries += 1
+        #     print("try again. tries = {}".format(tries))
+        #     if tries >= 100:
+        #         break
+        # map1.expandRings()
+        map1.saveJSON("henk.txt")
+        # map1.expandRings()
+        # map1.plot()
+        map1.waterBody.clear()
 
     # enhancements
     # map1.addWater()

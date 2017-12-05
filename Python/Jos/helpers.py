@@ -520,6 +520,55 @@ class Rectangle(object):
 
         return self.bound_coords
 
+    def getShortestDistance(self, otherBoundaries):
+
+        # instanciate with a large number, so the first one will always become shorter
+        shortest = 300
+
+        # get corners from boundaries
+        houseCorners = self.getBoundCoords()
+        otherCorners = []
+        for boundary in otherBoundaries:
+            for coord in boundary.getBoundCoords():
+                otherCorners.append(coord)
+
+        # print(otherCorners)
+        # per coord of the selected house
+        for hc in houseCorners:
+
+            # now, check distances hc vs. otherCoords
+            x1 = hc[0]
+            y1 = hc[1]
+            allDistancesWithoutRoot = []
+            for other in otherCorners:
+
+                # get second coord info
+                x2 = other[0]
+                y2 = other[1]
+
+                # calculate distance to this point using pythagoras
+                disx = abs(x1 - x2)
+                disy = abs(y1 - y2)
+
+                # TODO test the thing BART talked about
+                if   self.y1 <= y2 <= self.y2:
+                    # x distance = complete distance, still need power(disy) for the sake of speed
+                    allDistancesWithoutRoot.append(disx * disx)
+                elif self.x1 <= x2 <= self.x2:
+                    # y distance = complete distance, still need power(disy) for the sake of speed
+                    allDistancesWithoutRoot.append(disy * disy)
+                else:
+                    allDistancesWithoutRoot.append(
+                        disx * disx  + disy * disy
+                    )
+
+            # calculate square root part separately, to
+            foundShortest = sqrt(min(allDistancesWithoutRoot))
+            if foundShortest < shortest:
+                shortest = foundShortest
+
+        # return the shortest shortest
+        return shortest
 
 ##########################################################################
 
@@ -744,52 +793,34 @@ class Map(object):
         Determine the value of the land.
         """
         total = 0
+        allBoundaries = [house.boundary for house in self.house]
+        for i in range(len(self.house)):
 
-        # per house
-        # firstly, get all corners
-        allCorners = []
-        for house in self.house:
-            bounds = house.boundary.getBoundCoords()
-            allCorners.append(bounds)
-
-        # secondly, extract correct comparrisonlist out of these lists
-        # bart help wat is effectiever
-
-        # 1 deze
-        # testList = [1,2,3,4,5]
-        # for i, houseCorners in enumerate(testList):
-        #     otherCorners = copy(testList)
-        #     del otherCorners[i]
-        #     print("dit huis: {}".format(houseCorners))
-        #     print("de rest: {}".format(otherCorners))
-        #
-        # 2 of deze
-
-        # per house
-        for i in range(len(allCorners)):
             # create the house in question, and all other houses
-            otherCorners = copy(allCorners)
-            houseCorners = otherCorners.pop(i)
+            otherBoundaries = copy(allBoundaries)
+            boundary = otherBoundaries.pop(i)
 
-            # flatten list
-            otherCoords = [coord for otherHouse in otherCorners for coord in otherHouse]
-            # print("dit huis: {}".format(houseCorners))
-            # print("de rest: {}".format(otherCorners))
+            # calculate the shortest distance between a boundary and other boundaries
+            shortest = boundary.getShortestDistance(otherBoundaries)
 
-            # per coord of the selected house
-            for hc in houseCorners:
+            # selected houses' housetype
+            selType = self.house[i].type
 
-                # now, check distances hc vs. otherCoords
-                otherCoords
+            # the additional space is determined by subtracting the mandatory personal space
+            addPersonalSpace = shortest - selType.baseRing
+            if addPersonalSpace < 0:
+                print("ERROR: encountered mandatory personal space errors during calculations, press ctrl + c to quit")
+                while(True):
+                    pass
 
+            # now, calculate the value of this house
+            ringPrice = (int) (selType.ringValue * addPersonalSpace)
+            housePrice = selType.value
 
+            # and update total with this
+            total += ringPrice + housePrice
 
-        # thirdly, per comparrison, store smallest distance
-        for house in self.house:
-
-            # add house's cummilative value of the current ring
-            total += house.ring.cumValue
-
+        # return the accumilation of all those values
         return total
 
     def calculateValueEstimate(self):
@@ -959,9 +990,9 @@ class Map(object):
 
         # write subtitle based upon map's correctness
         if self.areConstraintsSatisfied():
-            ax.set_title("Map value: {:,}".format(self.calculateValueEstimate()))
+            ax.set_title("Map value: {:,}".format(self.calculateValue()))
         else:
-            ax.set_title("MAP IS INCORRECT | Map value: {:,}".format(self.calculateValueEstimate()), color='red')
+            ax.set_title("MAP IS INCORRECT | Map value: {:,}".format(self.calculateValue()), color='red')
 
         # add water to the map
         for body in self.waterBody:
