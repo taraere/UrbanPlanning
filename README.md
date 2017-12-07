@@ -7,12 +7,12 @@ by Tara, Christiaan, and Jos
 
 -   dependencies  
     
-    Holds all dependancies various algorithms rely upon 
+    package which consists of all dependancies various algorithms can rely upon.
     
 -   Visualisations
 
     Contains subfolders with screenshots of best or remarkable maps we've come across. Visualisations have been made by using 
-    mathplotlib, rhino and grasshopper. 
+    Mathplotlib, Rhino and Grasshopper. 
 
 ## log 
 Week 1
