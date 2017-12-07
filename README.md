@@ -2,6 +2,19 @@
 Beunhaas Architects
 by Tara, Christiaan, and Jos
 
+
+## navigation
+
+-   dependencies  
+    
+    Holds all dependancies various algorithms rely upon 
+    
+-   Visualisations
+
+    Contains subfolders with screenshots of best or remarkable maps we've come across. Visualisations have been made by using 
+    mathplotlib, rhino and grasshopper. 
+
+## log 
 Week 1
 Three main issues presented themselves to us.
 1.  Overlapping
