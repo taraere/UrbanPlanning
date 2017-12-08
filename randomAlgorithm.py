@@ -1,21 +1,12 @@
 """
 NAME    printSquare
 
-AUTHORS Christiaan Wewer
-        Tara Elsen
-        jos feenstra        1196 95
+AUTHORS Tara Elsen
 
 DESC    STATE SPACE estimation calculation
 
 NOTE    this thing is an example of how to use helpers
 """
-
-
-# TODO turn main into hillclimber
-# TODO save all values generated in .txt file
-# TODO make an algorithm which determines which ring is the most valuable to add, with value in price / m2
-from math import factorial
-
 from Now.helpers import *
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
@@ -88,13 +79,6 @@ def moveHouse(aMap, aHouse, x_change, y_change):
     x_coord += x_change
     y_coord += y_change
     aHouse.relocate((x_coord, y_coord))
-
-"""
-Try to increase distances between houses
-"""
-def increaseDistance(aMap, aHouse):
-    aHouse.boundary.getShortestDistance()
-
 
 """
 build a correct random map
