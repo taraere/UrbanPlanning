@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import sys
 
 # choose 0, 1 or 2 to get 20, 40 or 60 houses
-SELECTED_HOUSE_COUNT = 60 # HOUSE_COUNT[0]
+SELECTED_HOUSE_COUNT = 20 # HOUSE_COUNT[0]
 
 
 def hillclimberTwoHouses(usedMap, maxIterations, xValues, yValues):
@@ -54,6 +54,7 @@ def hillclimberTwoHouses(usedMap, maxIterations, xValues, yValues):
 
         # append xValues
         xValues.append(iteration)
+
 
 def swapHouses(usedMap, houseIntOne, houseIntTwo):
 
@@ -116,6 +117,52 @@ def hillclimberRandomRelocateRecursive(usedMap, startCounter, maxIterations, rel
         return hillclimberRandomRelocateRecursive(usedMap, startCounter, maxIterations, relocateIterations, xValues, yValues)
 
 
+def hillclimberRandomRelocate(usedMap, maxIterations, relocateIterations, xValues, yValues):
+
+    for startCounter in range(maxIterations):
+        # calculate mapvalue
+        mapValue = usedMap.calculateValue()
+        print("mapvalue before: " + str(mapValue))
+
+        # get random house
+        randHouseInt = randint(0, len(usedMap.house) - 1)
+
+        # get coordinates from house randHouseInt
+        coord1 = usedMap.house[randHouseInt].origin
+
+        usedMap.house[randHouseInt].relocate("random")
+
+        # calculate value of map after new relocation
+        mapValueAfter = usedMap.calculateValue()
+
+        print(mapValueAfter)
+
+        # replaces house if necessary
+        if mapValueAfter < 0:
+            counterForRelocation = 0
+            while mapValueAfter < 0:
+                usedMap.house[randHouseInt].relocate("random")
+                mapValueAfter = usedMap.calculateValue()
+                counterForRelocation += 1
+                if counterForRelocation > relocateIterations:
+                    usedMap.house[randHouseInt].relocate(coord1)
+                    mapValueAfter = usedMap.calculateValue()
+
+        if mapValueAfter <= mapValue:
+            print("map is not better")
+            usedMap.house[randHouseInt].relocate(coord1)
+            mapValueAfter = usedMap.calculateValue()
+            print("new value after relocate: {}".format(str(mapValueAfter)))
+
+        yValues.append(mapValueAfter)
+        xValues.append(startCounter)
+
+        # calculate value
+        print("mapvalue After: " + str(mapValueAfter))
+
+        print()
+
+
 def randomMapAlgorithm(tries, houseTypeList, xValues, yValues):
 
     # initialize counter, map, fill map and get value
@@ -157,7 +204,6 @@ def fillMapWithRandomNonCollidingHouses(usedMap, houseTypeList):
         ht = houseTypeList[i]
         usedMap.addHouse(ht, (0, 0), 0, "random_positions", "non_colliding")
 
-
 """
 build a correct random map
 """
@@ -184,13 +230,17 @@ def main():
     xValues2 = []
     xValues3 = []
 
-    map1 = randomMapAlgorithm(5000, housetypelist, xValues1, yValues1)
+    map1 = randomMapAlgorithm(10, housetypelist, xValues1, yValues1)
 
     incrementValue = xValues1[-1]
     xValues2.append(incrementValue)
     yValues2.append(yValues1[-1])
 
-    hillclimberRandomRelocateRecursive(map1, 0, 2000, 500, xValues, yValues2)
+    map1.plot()
+
+    hillclimberRandomRelocate(map1, 20, 30, xValues, yValues2)
+
+    map1.plot()
 
     for value in xValues:
         xValues2.append(value + incrementValue)
@@ -200,7 +250,7 @@ def main():
     xValues3.append(incrementValue)
     yValues3.append(yValues2[-1])
 
-    hillclimberTwoHouses(map1, 5000, xValues, yValues3)
+    hillclimberTwoHouses(map1, 10, xValues, yValues3)
 
     for value in xValues:
         xValues3.append(value + incrementValue)
