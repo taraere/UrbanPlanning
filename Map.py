@@ -3,14 +3,14 @@ import pandas
 from House import *
 from Rectangle import *
 
+"""
+Map class which holds houses and has a method of printing them
+
+METHODS AND THEIR USE:
+self.addHouse(type, coord, rings)
+self.plot()
+"""
 class Map:
-    """
-    Map class which holds houses and has a method of printing them
-    
-    METHODS AND THEIR USE:
-    self.addHouse(type, coord, rings)
-    self.plot()
-    """
 
     def __init__(self, coord1=(0,0), coord2=AREA):
         # init base values
@@ -29,25 +29,25 @@ class Map:
 
 
 
+    """
+    add a [aType] house to the map at [aCoord], with [addrings] rings
+    """
     def addHouseStupid(self, aType, aCoord, addRings):
-        """
-        add a [aType] house to the map at [aCoord], with [addrings] rings
-        """
 
         # simple way of creating a house
         self.houses.append(House(aType, aCoord, addRings))
 
+    """
+    add a [aType] house to the map at [aCoord], with [addrings] rings
+    the following options are usable:
+        ["non_colliding"]
+            pick random house locations until the position is valid.
+        ["random_positions"]
+            place house at a random starting location
+        ["Tactical_fit"]
+            TODO
+    """
     def addHouse(self, aType, aCoord, addRings, *options):
-        """
-        add a [aType] house to the map at [aCoord], with [addrings] rings
-        the following options are usable:
-            ["non_colliding"]
-                pick random house locations until the position is valid.
-            ["random_positions"]
-                place house at a random starting location
-            ["Tactical_fit"]
-                TODO
-        """
 
         # index
         # TODO add index to houses
@@ -91,10 +91,10 @@ class Map:
                     print("Times Relocated: ", relocateCounter)
                     break
 
+    """
+    Expand all rings to their maximum possible value.
+    """
     def expandRings(self):
-        """
-        Expand all rings to their maximum possible value.
-        """
 
         # NOTE this code might also work with coordinate distances, distance to edge etc, and then floor() the minimal answer
 
@@ -103,7 +103,7 @@ class Map:
         # make a new list of houses
         newHouses = []
 
-        # per imbedded hosue
+        # per imbedded house
         for house in self.houses:
             # TODO do while loop?????
             houses = self.houses
@@ -137,15 +137,12 @@ class Map:
         self.houses = newHouses
 
 
+    """
+    Add water to the map.
+    """
     def addWater(self):
-        """
-        Add water to the map.
-        """
 
         waterArea = WATER_PERCENTAGE * AREA[0] * AREA[1]
-        # print()
-        print("\nadding water...")
-        print(waterArea)
 
         """
         # ingredients
@@ -169,11 +166,14 @@ class Map:
 
         ? when do i try smaller squares / rectangles
         """
+        # print()
+        print("\nadding water...")
+        print(waterArea)
 
+    """
+    Determine the value of the land.
+    """
     def calculateValue(self):
-        """
-        Determine the value of the land.
-        """
         total = 0
         # per house
         for house in self.houses:
@@ -183,12 +183,7 @@ class Map:
         return total
 
 
-    @property
     def save(self):
-        """
-        plot the full map with all houses. This code is hard to understand
-        without understanding the mathplot.py libaries
-        """
 
         file_name = "Saves/" + str(self.calculateValue()) + ".csv"
         with open(file_name , "w"):
@@ -198,6 +193,11 @@ class Map:
                 locationList.append(row)
             writer = pandas.DataFrame(locationList, columns=["x-co-ordinate", "y-co-ordinate", "house-type"])
             writer.to_csv(file_name, index=False)
+            print("location list" + str(locationList))
+    """
+    plot the full map with all houses. This code is hard to understand
+    without understanding the mathplot.py libaries
+    """
 
     def plot(self):
         # init figure and axes

@@ -1,26 +1,49 @@
 """
-DESC    Contains Class information which represents the datastructure.
+NAME    helpers.py
+
+AUTHOR  Jos Feenstra
+        Tara Elsen
+        Christiaan Wewer
+
+DESC    contains all constant data, dependencies, functions and links to classes
 
 NOTE    the minimum distance to another home is represented by the name "ring",
-        as its boundary representations look like square rings.
+        as its boundary representations look like rings.
+
 """
+import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.path as mpath
+import matplotlib.patches as mpatches
 from matplotlib.patches import Rectangle as mathplot_rectangle
+from matplotlib.patches import FancyBboxPatch
+
 import numpy as np
+import operator
+import json
+import os
+
+from copy import copy
 from random import randint, shuffle, random, randrange, choice, uniform
 from collections import Iterable
-import csv
+from math import sqrt
 
-# general constants
+# determine if algorithms should use the orthodox or unortodox approach
+ORTHODOX = True
+
+# map constances
 AREA = (160, 180)
 HOUSE_COUNT = [20, 40, 60]
 
-# water
-WATER_PERCENTAGE = 0.20         # percentage of total area covered by water
-MAX_BODIES       = 4            # maximum number of bodies
-MAX_RATIO        = 4            # l/b < x AND  b/l < x
+# water constances
+WATER_PERCENTAGE  = 0.20         # percentage of total area covered by water
+MAX_BODIES        = 4            # maximum number of bodies
+RATIO_UPPER_BOUND = 4            # l/b < x AND  b/l < x
+RATIO_LOWER_BOUND = 1 / RATIO_UPPER_BOUND
+WATER_COLOUR      = "b"
+STARTING_WATER_ITERATION_SIZE = 1.00
 
-# house constants
+# house constances
 NAME           = ["Family",  "Bungalow", "Mansion"  ]
 FREQUENCY      = [0.60,      0.25,       0.15       ]
 VALUE          = [285000,    399000,     610000     ]
@@ -28,107 +51,19 @@ SITE           = [(8, 8),    (10, 7.5),  (11, 10.5 )]
 BASE_RING      = [2,         3,          6,         ]
 RING_INCREMENT = [0.03,      0.04,       0.06       ]
 COLOUR         = ["r",       'g',        'y'        ]
+INTEGER        = [0,         1,          2          ]
+
+# An unelegant element of the code
+A_VERY_HIGH_INT = 50000
+NONE = 50000
 
 
-################################################################################
-"""
-HouseType Class
 
-Init:
-    name
-    frequency
-    value
-    site
-    base ring
-    ring increment (value increase)
-    max ring iteration (cannot be bigger than map)
-    color (to recognise houses more easily)
-
-Methods:
-    printRingInfo
-"""
-class HouseType:
-
-    def __init__(self, aName, aFrequency, aValue, aSite, aBaseRing, aRingIncrement, MaxRingIt, aColour):
-
-        # base values
-        self.name      = aName
-        self.frequency = aFrequency
-        self.value     = aValue
-        self.site      = aSite
-        self.baseRing  = aBaseRing
-        self.ringInc   = aRingIncrement
-        self.colour    = aColour
-
-        # calculated values
-        self.width     = self.site[0]
-        self.height    = self.site[1]
-        self.area      = self.width * self.height
-        self.landValue = self.value / self.area
-        self.ringValue = round(self.ringInc * self.value)
-
-        # do not calculate rings if the basering is incorrect
-        if self.baseRing - 1 < 0:
-            raise print("ERROR: Ring Creation Error")
-
-        # instantiate cumulative variables
-        cumArea        = self.area
-        cumValue       = self.value
-        cumLandValue   = self.landValue
-
-        # fill ring list with Ring objects
-        class Ring:
-            pass
-        self.ring = list()
-
-        # iterate starting from basering, ending at Max Ring Iteration
-        for ringWidth in range(self.baseRing, MaxRingIt):
-
-            # turn r into Ring object
-            r = Ring()
-
-            # calc land value in € / m2, and calc other attributes
-            r.ringWidth = ringWidth                  # synoniem
-            r.x = ringWidth * 2 + self.width
-            r.y = ringWidth * 2 + self.height
-            r.area = r.x * r.y - cumArea
-
-            # the first ring is part of the house, so it yields no value
-            r.value = 0
-            if ringWidth != self.baseRing:
-                r.value = self.ringValue
-            r.landValue = round(r.value / r.area, 1)
-
-            # increase the cummilative values, and add the current values to r
-            cumArea += r.area
-            r.cumArea = cumArea
-
-            cumValue += r.value
-            r.cumValue = cumValue
-
-            cumLandValue = round(cumValue / cumArea)
-            r.cumLandValue = cumLandValue
-
-            # add Ring object r to list ring
-            self.ring.append(r)
-
-    def printRingInfo(self):
-        print()
-        print(self.name)
-        printstr = "| ring: {:2}   x: {:2}   y: {:3}   area: {:5}  landValue: {:5}  cumArea: {:6}  cumValue: {:7}   cumLandValue: {:5} |"
-        print((len(printstr) - 4) * "-")
-        for r in self.ring:
-            print(printstr.format(r.ringWidth, r.x, r.y, r.area, r.landValue, r.cumArea, r.cumValue, r.cumLandValue ))
-        print((len(printstr) - 4) * "-")
-
-"""
-FUNCTIONS
-
-This area is for functions with are not part of classes
-
-instantiate the 3 house-type objects
-"""
 def initHouseTypes(IterationMax=20):
+    """
+    instantiate the 3 housetype objects
+    """
+
     # determines how many rings will be added and calculated
     maximumRingIterations = IterationMax
 
@@ -137,32 +72,31 @@ def initHouseTypes(IterationMax=20):
     for i,s in enumerate(NAME):
         houseTypeList.append(
             HouseType(NAME[i], FREQUENCY[i], VALUE[i], SITE[i], BASE_RING[i],
-                RING_INCREMENT[i], maximumRingIterations, COLOUR[i])
+                RING_INCREMENT[i], maximumRingIterations, COLOUR[i], INTEGER[i])
         )
     return houseTypeList
 
-
-"""
-add a coordinate and a vector (movement representative) together
-- make a coordinate class/?????
-"""
-
 def moveCoord(coordinate, vector):
+    """
+    add a coordinate and a vector (movement representative) together
+    """
     return tuple(sum(x) for x in zip(coordinate, vector))
+    # pick a random coord w
 
+def randomCoord(lowestCoord, highestCoord):
+    """
+    pick a random coordinate,
+    """
+    # pick a x value
+    random_x = round(uniform(lowestCoord[0], highestCoord[0]) * 2) / 2
 
+    # pick a y value
+    random_y = round(uniform(lowestCoord[1], highestCoord[1]) * 2) / 2
 
+    return (random_x, random_y)
 
-
-
-
-
-
-
-
-
-
-
+# import classes
+from Now.classes import HouseType, House, WaterBody, Rectangle, Map
 
 
 

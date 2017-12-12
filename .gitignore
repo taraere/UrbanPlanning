@@ -5,3 +5,4 @@ __pycache__/
 *.xml
 .ipynb_checkpoints
 .idea
+*.iml
