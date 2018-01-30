@@ -1,3 +1,4 @@
+
 """
 NAME    classes.py
 
@@ -12,16 +13,9 @@ DESC    contains the classes:
         - Rectangle
         - Map
 
-NOTE
-
-    IN HINDSIGHT, we shouldve made waterbody and house an extention of rectangle,
-    instead of nesting respective rectangles in the ".boundary". Right now, to many
-    lines of code will have to be rewritten in order to fix this. This approach
-    would have come with its own complications, but the end result would be more clear
-
 """
 # dependent upon the methods, constances and libaries in helpers
-from dependencies.helpers import *
+from helpers import *
 
 ################################################################################
 
@@ -117,9 +111,6 @@ class House(object):
     def __init__(self, aType, aCoord, addRings):
         self.type = aType
         self.addRings = addRings
-
-        # shortest distance to another house, will be added later
-        self.shortest = 0
 
         # assign either a random coordinate, or assign given coordinate
         if aCoord == "random":
@@ -430,40 +421,6 @@ class Rectangle(object):
         # if code falls down till this part, position is correct
         return True
 
-    def isTouchingTight(self, listOfRectangles):
-        """
-        return true if self is touching any part of list of rectangles
-        """
-        # empty list means its not overlapping
-        if not listOfRectangles:
-            return False
-
-        # make it so a single rectangle also works
-        if not isinstance(listOfRectangles, Iterable):
-            listOfRectangles = [listOfRectangles]
-
-        # for better readability
-        A = self
-
-        # rectangle B (other)
-        for B in listOfRectangles:
-            # both 'an X coord' and 'a Y coord' of B need to be within the respective bounds of A if they touch.
-            # this can be writen shorter, but this is the most readable
-
-            if ((A.x1 <= B.x1 <= A.x2      # one of my x's are within your x's
-            or   A.x1 <= B.x2 <= A.x2
-            or   B.x1 <= A.x1 <= B.x2      # one of your x's are within my x's
-            or   B.x1 <= A.x2 <= B.x2)
-            and
-                (A.y1 <= B.y1 <= A.y2      # one of my y's are within your y's
-            or   A.y1 <= B.y2 <= A.y2
-            or   B.y1 <= A.y1 <= B.y2      # one of your y's are within my y's
-            or   B.y1 <= A.y2 <= B.y2)):
-                return True
-
-        # if code falls down till this part, none of the rectangles are overlapping with self
-        return False
-
     def isTouching(self, listOfRectangles):
         """
         return true if self is touching any part of list of rectangles
@@ -510,10 +467,10 @@ class Rectangle(object):
     def getEdgesFlipped(self, ringWidth):
 
         # order: DTRL, the direction is flipped
-        self.edges = [[(self.x1, self.y2 + 1), (self.x2, self.y2 + 1), ringWidth, "D"],  # top range
-                      [(self.x1, self.y1 - 1), (self.x2, self.y1 - 1), ringWidth, "T"],  # bottom/down range
-                      [(self.x2 - 1, self.y1), (self.x2 - 1, self.y2), ringWidth, "R"],  # right range
-                      [(self.x1 + 1, self.y1), (self.x1 + 1, self.y2), ringWidth, "L"]]  # left range
+        self.edges = [[(self.x1, self.y2), (self.x2, self.y2), ringWidth, "D"],  # top range
+                      [(self.x1, self.y1), (self.x2, self.y1), ringWidth, "T"],  # bottom/down range
+                      [(self.x2, self.y1), (self.x2, self.y2), ringWidth, "R"],  # right range
+                      [(self.x1, self.y1), (self.x1, self.y2), ringWidth, "L"]]  # left range
         return self.edges
 
     def getBoundCoords(self):
@@ -533,10 +490,10 @@ class Rectangle(object):
         houseCorners = self.getBoundCoords()
         otherCorners = []
         for boundary in otherBoundaries:
-            if boundary is not self:
-                for coord in boundary.getBoundCoords():
-                    otherCorners.append(coord)
+            for coord in boundary.getBoundCoords():
+                otherCorners.append(coord)
 
+        # print(otherCorners)
         # per coord of the selected house
         for hc in houseCorners:
 
@@ -586,11 +543,11 @@ class Rectangle(object):
             if selfCorners == setCorners:
                 continue
 
-            # now, check distances hc vs. otherCoords
-            sixteenDistances = []
-
             # per selfs corner coordindate in self.set
             for selfC in selfCorners:
+
+                # now, check distances hc vs. otherCoords
+                sixteenDistances = []
 
                 # per other corner coordindate in set
                 for otherC in setCorners:
@@ -599,7 +556,7 @@ class Rectangle(object):
                     disx = abs(selfC[0] - otherC[0])
                     disy = abs(selfC[1] - otherC[1])
 
-                    # make sure that if possible, the distance from wall to wall is calculate
+                    # TODO test the thing BART talked about
                     if   self.y1 <= otherC[1] <= self.y2:
                         # x distance = complete distance, still need power(disy) for the sake of speed
                         sixteenDistances.append(disx * disx)
@@ -609,7 +566,6 @@ class Rectangle(object):
                     else:
                         sixteenDistances.append(disx * disx  + disy * disy)
 
-
             # calculate square root part separately, to speed up process
             # foundshortest is the minimum distance in between self and other
             foundShortest = min(sixteenDistances)
@@ -617,16 +573,14 @@ class Rectangle(object):
             # add it to the list of distances
             self.distanceList.append(foundShortest)
 
-        # print(self.distanceList)
-
         # return the shortest distance from the list
-        return sqrt(min(self.distanceList))
+        return round(sqrt(min(self.distanceList)))
 
 ################################################################################
 
 class Map(object):
     """
-    Map class which holds houses
+    Map class which holds houses and has a method of printing them
 
     METHODS AND THEIR USE:
     Map(coord1=(0,0), coord2=(AREA))                 # defines the surface area of the map
@@ -638,6 +592,8 @@ class Map(object):
     calculateValueEstimate()                         # estimate map value using the currently placed rings
     calculateValue()                                 # the actual value of the map is calculated here, regardless of rings present
     getEdges(ringWidth)                              # used by FitInOnEdge algorithm, dont delete, but unimportant
+    load()                                           # tara's on the case!
+    save()                                           # tara's on the case!
     findHouseWithMostLandValueRingIncrease()         # THIS IS THE RING ADDER, it returns the index of the house with the best next ring
     areConstraintsSatisfied()                        # a final check, returns true if all map conditions are met
     rebuild( RUNTIME_LIMIT_MAP, RUNTIME_LIMIT_HOUSE) # place all houses on the map again with a certain guaranteed free space, and try to make them fit
@@ -785,7 +741,7 @@ class Map(object):
 
         # determines chosen TestSizes in while loop. change to make the algorithm more accurate / slow
         DECREMENT = round(-0.05 * waterArea)
-        STARTING_SIZE = round(STARTING_WATER_ITERATION_SIZE * waterArea)
+        STARTING_SIZE = round(0.80 * waterArea)
 
         # init values to keep track of
         bodiesLeft = MAX_BODIES
@@ -798,6 +754,8 @@ class Map(object):
         testSize = STARTING_SIZE
         while (testSize * bodiesLeft >= waterLeft and waterLeft != 0):  # macro while loop
 
+            # test
+            print(testSize / waterArea)
             # test current area size
             wb.changeSurface(testSize)
 
@@ -807,8 +765,8 @@ class Map(object):
             succeeded = False
             while(tries < MAX_TRIES):    # micro while loop
                 # if the waterbody isnt touching any houses or other bodies, and is within the map
-                if (not wb.boundary.isTouchingTight([h.boundary for h in self.house]) and not
-                        wb.boundary.isTouchingTight([w.boundary for w in self.waterBody]) and
+                if (not wb.boundary.isTouching([h.boundary for h in self.house]) and not
+                        wb.boundary.isTouching([w.boundary for w in self.waterBody]) and
                         wb.boundary.isWithin(self.boundary)):
                     # the waterbody is correct
                     succeeded = True
@@ -827,9 +785,13 @@ class Map(object):
                 if waterLeft < testSize:
                     testSize = waterLeft
 
+                # feedback
+                print("Placed water.")
+                print("water left: {}".format(waterLeft))
+
                 if waterLeft <= 0:
                     # sucess macro while loop:
-                    print("Water added.")
+                    print("Done!")
                     return True
 
                 # no decrement, macro while loop should try to fit the same size somewhere else
@@ -843,6 +805,10 @@ class Map(object):
         self.waterBody.clear()
         return False
 
+    def getAllCorners(self):
+
+        return [house.boundary.getBoundCoords() for house in self.house]
+
     def calculateValue(self):
         """
         Determine the value of the land.
@@ -850,28 +816,22 @@ class Map(object):
         total = 0
 
         # calculate all corners houses of the map
-        allCorners = [house.boundary.getBoundCoords() for house in self.house]
-        # allBoundaries = [house.boundary for house in self.house]
+        allCorners = self.getAllCorners()
 
         # per house
         for house in self.house:
 
             # calculate the shortest distance between a boundary and other boundaries
             shortest = house.boundary.getShortestDistance(allCorners)
-            
+
             # the additional space is determined by subtracting the mandatory personal space
             addPersonalSpace = shortest - house.type.baseRing
-
-            # assign distance to house, so it can be referenced
-            house.shortest = shortest
-
-            # check if map conditions are met (this method of map doubles as a validation checker)
             if addPersonalSpace < 0:
-                house.shortest = 0
+                # map conditions arent met (this method of map doubles as a validation checker)
                 return -1
 
             # now, calculate the value of this house
-            ringPrice = round((house.type.ringValue * addPersonalSpace))
+            ringPrice = (int) (house.type.ringValue * addPersonalSpace)
             housePrice = house.type.value
 
             # and update total with this
@@ -903,6 +863,15 @@ class Map(object):
                 [(0,0), (0,0), 0, "Dm"],  # bottom/down range
                 [(0,0), (0,0), 0, "Lm"],  # left range
                 [(0,0), (0,0), 0, "Rm"]]  # right range
+
+    """ tara is on the case! """
+    def load():
+        # TODO
+        pass
+
+    def save():
+        # TODO
+        pass
 
     def findHouseWithMostLandValueRingIncrease(self):
 
@@ -990,17 +959,12 @@ class Map(object):
         for house in self.house:
 
             # all houses with selection excluded, and waterbodies
-            waterBounds = [wb.boundary for wb in self.waterBody]
-            houseBounds = [house.boundary for h in self.house if house is not h]
+            otherBounds = [h.ringboundary for h in self.house if h is not house]
+            otherBounds.extend([wb.boundary for wb in self.waterBody])
 
-            # check if this house is touching a body of water
-            if house.boundary.isTouching(waterBounds):
-                print("map not satisfied: houseTouchWater")
-                return False
-
-            # check if this house is touching another house
-            if house.boundary.isTouching(houseBounds):
-                print("map not satisfied: houseTouchHouse")
+            # check if this house's ringboundary is touching any other selected boundaries
+            if house.boundary.isTouching(otherBounds):
+                print("map not satisfied: houseTouch")
                 return False
 
             # check if the house is outside of map boundaries
@@ -1105,14 +1069,10 @@ class Map(object):
         fig.suptitle('HEURISTICS: Amstelhaege', fontsize=14, fontweight='bold')
 
         # write subtitle based upon map's correctness
-        value = self.calculateValue()
-        if value == -1:
-            print("map not satisfied: houseTouchHouse")
-            ax.set_title("MAP IS INCORRECT", color='red')
-        elif not self.areConstraintsSatisfied():
-            ax.set_title("MAP IS INCORRECT | Map value: {}".format(value), color='orange')
+        if self.areConstraintsSatisfied():
+            ax.set_title("Map value: {:,}".format(self.calculateValue()))
         else:
-            ax.set_title("Map value: {:,}".format(value))
+            ax.set_title("MAP IS INCORRECT | Map value: {:,}".format(self.calculateValue()), color='red')
 
         # add water to the map
         for body in self.waterBody:
@@ -1121,23 +1081,13 @@ class Map(object):
 
         # add houses to the map with rings
         for house in self.house:
-            # create a normal mathplot rectangle for the house
-            rec1 = mathplot_rectangle(house.boundary.coord1,
-                                      house.boundary.width,
-                                      house.boundary.height,
-                                      0, fc=house.type.colour,
-                                      edgecolor='k',linewidth=1)
+            rec1 = mathplot_rectangle(house.boundary.coord1, house.boundary.width, house.boundary.height, 0, fc=house.type.colour, edgecolor='k',linewidth=1)
+            rec2 = mathplot_rectangle(house.ringboundary.coord1, house.ringboundary.width, house.ringboundary.height, 0, fc=house.type.colour, alpha=0.2)
             ax.add_patch(rec1)
-
-            # create a rectangle with rounded corners for the distance to another house
-            rec2 = FancyBboxPatch(house.boundary.coord1,
-                                  house.boundary.width,
-                                  house.boundary.height,
-                                  boxstyle="round,pad=0.1",
-                                  mutation_scale=house.shortest * 10,
-                                  fc=house.type.colour,
-                                  alpha=0.2)
             ax.add_patch(rec2)
+
+        # EXAMPLE FOR PROPERTIES
+        # rect = patches.Rectangle((50,100),40,30,linewidth=1,edgecolor='r',facecolor='none')
 
         # determines how axis are drawn
         ax.set_xticks(np.arange(0, self.width, 10))
@@ -1148,15 +1098,11 @@ class Map(object):
         # draw the board
         plt.show()
 
-    def saveJSON(self, pathOfFile, nameOfFile):
-        """
-        pathOfFile should lead to the a folder containing the json
-        nameOffile should be its name
+    def saveJSON(self, nameOfFile):
 
-        """
         # move to the right directory if needed
-        if os.getcwd() is not pathOfFile:
-            os.chdir(pathOfFile)
+        if os.getcwd() is not jsonPATH:
+            os.chdir(jsonPATH)
 
         # construct a dictonary of map data
         data = {}
@@ -1165,8 +1111,7 @@ class Map(object):
         data['map'] = []
         data['map'].append({
             'width': AREA[0],
-            'height': AREA[1],
-            'value': self.calculateValue()
+            'height': AREA[1]
         })
 
         # convert map's houses to json
@@ -1175,17 +1120,19 @@ class Map(object):
             data['houses'].append({
                 'x1'  : house.origin[0],
                 'y1'  : house.origin[1],
-                'int' : house.type.integer,
+                'type': house.type.name,
+                'int': house.type.integer,
+                'ring': house.ring.ringWidth
             })
 
         # convert map's waterbodies to json
         data['water'] = []
         for water in self.waterBody:
             data['water'].append({
-                'x1'      : water.boundary.x1,
-                'y1'      : water.boundary.y1,
-                'ratio'   : water.ratio,
-                'surface' : water.surface
+                'x1'  : water.boundary.x1,
+                'y1'  : water.boundary.y1,
+                'x2'  : water.boundary.x2,
+                'y2'  : water.boundary.y2
             })
 
         # store data in json file
@@ -1194,61 +1141,20 @@ class Map(object):
         f.write(j)
         f.close()
 
-    def loadJSON(self, pathOfFile, nameOfFile, housetypes, addWater):
-        fullPath = pathOfFile + "//"+ nameOfFile
 
-        #Read JSON data into the data variable
-        if fullPath:
-            with open(fullPath, 'r') as f:
-                data = json.load(f)
-                f.close()
-        else:
-            print("loading json failed, could not open path")
-            return False
 
-        # reset houses and waterbodies of map
-        self.house.clear()
-        self.waterBody.clear()
-
-        # loop through jsons's house data elements
-        for house in data["houses"]:
-            x1 = house["x1"]
-            y1 = house["y1"]
-            ht = housetypes[house["int"]]
-
-            # turn values into house object
-            self.addHouseStupid(ht , (x1, y1), 0)
-
-        # skip adding water if bool is false
-        if not addWater:
-            return True
-
-        # loop through jsons's water data elements
-        for water in data["water"]:
-            x1 = water["x1"]
-            y1 = water["y1"]
-            ratio = water["ratio"]
-            surface = water["surface"]
-            newWaterBody = WaterBody((x1, y1), surface , ratio)
-
-            self.waterBody.append(newWaterBody)
-
-        return True
-    #
-    # def saveCSV(self):
-    #
-    #     file_name = "Saves/" + str(self.calculateValue()) + ".csv"
-    #     with open(file_name, "w"):
-    #         locationList = []
-    #         for house in self.houses:
-    #             row = [house.origin,, house.type.integer]
-    #             locationList.append(row)
-    #         for water in self.water:
-    #             # 3 is representative of water
-    #             row = [water.boundary.coord1, water.boundary.coord2, 3]
-    #             locationList.append(row)
-    #         writer = pandas.DataFrame(locationList, columns=["co-ordinate set 1", "co-ordinate set 2", "object ID"])
-    #         writer.to_csv(file_name, index=False)
-    #         print("location list" + str(locationList))
+        ## Save our changes to JSON file
+        # jsonFile = open("henk", "w")
+        # if not jsonFile:
+        #     print("could not open!")
+        # jsonFile.write(json.dumps(data))
+        # jsonFile.close()
+        #
+        # with open("replayScript.json", "w") as jsonFile:
+        #     json.dump(data, jsonFile)
+        # with open('henk.txt', 'w+') as outfile:
+        #     json.dump(data, outfile)
+        #     json.dumps(data)
+        #     print(json.dumps(data, indent=4))
 
 ################################################################################
