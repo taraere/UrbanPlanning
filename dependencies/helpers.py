@@ -268,6 +268,3 @@ def main_old2():
     map1.plot()
 
 
-
-
-"""
